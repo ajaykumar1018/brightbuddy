@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bright_kid/helpers/widgets/congratulation_bottomsheet.dart';
 import 'package:bright_kid/models/chapters_lesson_model.dart';
 import 'package:bright_kid/models/get_activities_overview_model.dart';
+import 'package:bright_kid/models/get_activities_overview_model2.dart';
 import 'package:bright_kid/models/get_chapters_model.dart';
 import 'package:bright_kid/models/get_courses_model.dart';
 import 'package:bright_kid/models/get_enrollment_model.dart';
@@ -66,48 +67,63 @@ class DashboardProvider extends ChangeNotifier {
     isLoading = true;
     await apiRequest
         .getEnrollment(loginData?.loginUser?.email ?? '')
-        .then((response)  async{
-              if (response != false)
-                {
-                  getEnrollmentModel = GetEnrollmentModel.fromJson(response);
-                 await getActivitiesOverView(
-                    '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
-                    getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
-                  );
-                }
-              else{
-                isLoading = false;
-                notifyListeners();
-              }
-            });
+        .then((response) async {
+      if (response != false) {
+        getEnrollmentModel = GetEnrollmentModel.fromJson(response);
+        await getActivitiesOverView(
+          '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+          getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+        );
+      } else {
+        isLoading = false;
+        notifyListeners();
+      }
+    });
+  }
+
+  Future getEnrollmentFunc2() async {
+    isLoading = true;
+    await apiRequest
+        .getEnrollment(loginData?.loginUser?.email ?? '')
+        .then((response) async {
+      if (response != false) {
+        getEnrollmentModel = GetEnrollmentModel.fromJson(response);
+        await getCraftActivities(
+          '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+          getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+        );
+      } else {
+        isLoading = false;
+        notifyListeners();
+      }
+    });
   }
 
   Future getCoursesFunc(int courseId) async {
     isLoading = true;
     print('loading start');
     await apiRequest.getCourses(courseId).then((response) {
-          isLoading = false;
-          notifyListeners();
-          print('loading stop');
-          if (response != false)
-            {
-              getCoursesModel = GetCoursesModel.fromJson(response);
-              print('opopopopopop');
-            }
-        });
+      isLoading = false;
+      notifyListeners();
+      print('loading stop');
+      if (response != false) {
+        getCoursesModel = GetCoursesModel.fromJson(response);
+        print('opopopopopop');
+      }
+    });
   }
 
   Future getChaptersFunc(int courseId) async {
     isLoading = true;
     print('ooo');
     await apiRequest.getChapters(courseId).then((response) => {
-      isLoading = false,
-      notifyListeners(),
-      if (response != false)
-        {
-          getChaptersModel = GetChaptersModel.fromJson(response),
-        }
-    });
+          isLoading = false,
+          notifyListeners(),
+          if (response != false)
+            {
+              getChaptersModel = GetChaptersModel.fromJson(response),
+            }
+        });
   }
 
   Future getChaptersLessonFunc(String email, int courseId) async {
@@ -116,14 +132,13 @@ class DashboardProvider extends ChangeNotifier {
     await apiRequest.getChaptersLessonFun(email, courseId).then((response) {
       isLoading = false;
       notifyListeners();
-      if (response != false)
-        {
-          chapterLessonList.clear();
-          response.forEach((res) {
-            chapterLessonList.add(ChaptersLessonModel.fromJson(res));
-          });
-          print('chapter lesson length : ${chapterLessonList?.length??0}');
-        }
+      if (response != false) {
+        chapterLessonList.clear();
+        response.forEach((res) {
+          chapterLessonList.add(ChaptersLessonModel.fromJson(res));
+        });
+        print('chapter lesson length : ${chapterLessonList?.length ?? 0}');
+      }
     });
   }
 
@@ -144,6 +159,47 @@ class DashboardProvider extends ChangeNotifier {
         });
         print(getActivitiesOverviewList.length);
       }
+    });
+  }
+
+  Future getGiffyData(String email, int courseId) async {
+    isLoading = true;
+    print('isloading =  true');
+    await apiRequest.getGiffyData(email, courseId).then((response) {
+      isLoading = false;
+      print('isloading =  false');
+      notifyListeners();
+      if (response != false) {
+        getActivitiesOverviewList.clear();
+        response.forEach((res) {
+          getActivitiesOverviewList
+              .add(GetActivitiesOverviewModel.fromJson(res));
+        });
+        print(getActivitiesOverviewList.length);
+      }
+    });
+  }
+
+  Future getCraftActivities(String email, int courseId) async {
+    isLoading = true;
+
+    print('isloading =  true');
+    await apiRequest.getCraftActivities(email, courseId).then((response) {
+      isLoading = false;
+      notifyListeners();
+      if (response != false) {
+        getActivitiesOverviewList2.clear();
+        response.forEach((res) {
+          getActivitiesOverviewList2
+              .add(GetActivitiesOverviewModel2.fromJson(res));
+        });
+        print("FIRST INDEX ONLY for CRAFT ACTIVITIES");
+        print(getActivitiesOverviewList2[0].categoryId);
+        print(getActivitiesOverviewList2[1].categoryId);
+
+        // return getActivitiesOverviewList2;
+      }
+      // return [];
     });
   }
 
@@ -181,6 +237,39 @@ class DashboardProvider extends ChangeNotifier {
     });
   }
 
+  Future submitActivity2(
+      String email,
+      int courseId,
+      String categoryId,
+      String activityCode,
+      var file,
+      String activityName,
+      ) async {
+    isLoading = true;
+    await apiRequest
+        .submitActivity2(
+      email,
+      courseId,
+      categoryId,
+      activityCode,
+      file,
+      activityName,
+    )
+        .then((response) {
+      isLoading = false;
+      notifyListeners();
+      if (response != false) {
+        Get.back();
+        Get.bottomSheet(
+            CongratulationsBottom(
+              title: "Your activity time has been submit \nsuccessfully.",
+              status: 1,
+            ),
+            enableDrag: false,
+            isDismissible: false);
+      }
+    });
+  }
 
   Future onchangePasswordButtonTapped(
       String email, String oldPassword, String newPassword) async {
@@ -217,6 +306,21 @@ class DashboardProvider extends ChangeNotifier {
         weeklyCalendarList.clear();
         response.forEach((res) {
           weeklyCalendarList.add(WeeklyCalendarModel.fromJson(res));
+        });
+        print(weeklyCalendarList.length);
+      }
+    });
+  }
+
+  Future weeklyCalendarFunc2(String email, int courseId) async {
+    isLoading = true;
+    await apiRequest.weeklyTrackingFunc2(email, courseId).then((response) {
+      isLoading = false;
+      notifyListeners();
+      if (response != false) {
+        weeklyCalendarList2.clear();
+        response.forEach((res) {
+          weeklyCalendarList2.add(WeeklyCalendarModel.fromJson(res));
         });
         print(weeklyCalendarList.length);
       }

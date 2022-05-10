@@ -22,12 +22,19 @@ class SeeCourseScreen extends StatefulWidget {
   String courseName;
   int courseId;
   int homeScreenContainer;
+  var data;
+  var topicList;
+  int yashscreen = -1;
+
   SeeCourseScreen({
     this.percentageCompleted,
     this.activitiesPercentage,
     this.courseName,
     this.courseId,
     this.homeScreenContainer,
+    this.data,
+    this.yashscreen,
+    this.topicList,
   });
 
   @override
@@ -194,8 +201,13 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
                           SizedBox(height: 5),
                           widget.homeScreenContainer == 0
                               ? Text(
-                                  getTranslated(Get.context, "total_topics") +
-                                      "\t${chapterLessonList?.length ?? 0}",
+                                  widget.data == null
+                                      ? getTranslated(
+                                              Get.context, "total_topics") +
+                                          "\t${chapterLessonList?.length ?? 0}"
+                                      : getTranslated(
+                                              Get.context, "total_topics") +
+                                          "\t${widget.data.length}",
                                   style: MyTextStyle.mulish().copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: white,
@@ -262,14 +274,13 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
                 SizedBox(height: 10),
                 (widget.homeScreenContainer == 0)
                     ? chapterLessonList == null ||
-                      chapterLessonList.isEmpty == null
+                            chapterLessonList.isEmpty == null
                         ? SizedBox()
                         : Expanded(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: List.generate(
-                                    chapterLessonList.length,
-                                    (index) {
+                                    chapterLessonList.length, (index) {
                                   return topicsCard(
                                     chapterLessonList[index],
                                     index,
@@ -314,8 +325,8 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
     return GestureDetector(
       onTap: () {
         Get.to(() => CourseTopicDetails(
-          chaptersLessonModel: model,
-          courseName: model?.chapterName ?? '',
+              chaptersLessonModel: model,
+              courseName: model?.chapterName ?? '',
             ));
       },
       child: Container(
@@ -349,7 +360,61 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
             Container(
               width: Get.width * .6,
               child: Text(
-                model?.chapterName??'',
+                model?.chapterName ?? '',
+                style: MyTextStyle.mulish().copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: themeColor,
+                    fontSize: Get.width * .038),
+              ),
+            ),
+            // Text(
+            //   '1/6',
+            //   style: MyTextStyle.mulish().copyWith(
+            //       fontWeight: FontWeight.bold,
+            //       color: Colors.black,
+            //       fontSize: Get.width * .035),
+            // )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget topicsCardyash(String name, String id, int index) {
+    ChaptersLessonModel model = chapterLessonList[index];
+    model.images = [
+      ChaptersLessonOurImage(image: topicColor1),
+      ChaptersLessonOurImage(image: topicColor2),
+      ChaptersLessonOurImage(image: topicColor3),
+      ChaptersLessonOurImage(image: topicColor4),
+      ChaptersLessonOurImage(image: topicColor5),
+      ChaptersLessonOurImage(image: topicColor6),
+    ];
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: Get.width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage(
+              model.images[model.images.length >= 6 ? index % 6 : index].image),
+        )),
+        margin: EdgeInsets.only(
+          bottom: 15,
+          left: Get.width * .05,
+          right: Get.width * .05,
+        ),
+        padding: EdgeInsets.symmetric(
+          vertical: Get.height * .03,
+          horizontal: Get.width * .04,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: Get.width * .6,
+              child: Text(
+                model?.chapterName ?? '',
                 style: MyTextStyle.mulish().copyWith(
                     fontWeight: FontWeight.bold,
                     color: themeColor,
@@ -388,9 +453,9 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
         width: Get.width,
         decoration: BoxDecoration(
             image: DecorationImage(
-          image: AssetImage(
-              model.images[model.images.length >= 6 ? index % 6 : index].image),
-        )
+              image: AssetImage(model
+                  .images[model.images.length >= 6 ? index % 6 : index].image),
+            )
             // boxShadow: [
             //   BoxShadow(
             //     color: Color(0xff000000).withOpacity(.16),

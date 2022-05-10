@@ -10,6 +10,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class ActivitiesOverViewDetailsScreen extends StatefulWidget {
   GetActivitiesOverviewModel activityModel;
+
   ActivitiesOverViewDetailsScreen({this.activityModel});
 
   @override
@@ -27,7 +28,7 @@ class _ActivitiesOverViewDetailsScreenState
         widget.activityModel.activities.map((e) => e.completed * 100).toList();
     double sum = ratings.fold(0, (p, c) => p + c);
     if (sum > 0) {
-      double average = sum / ratings.length;
+      double average = sum / (ratings.length * 100);
       totalPercentageAvg = average.ceilToDouble()?.toInt();
       print(totalPercentageAvg);
     }
@@ -88,12 +89,6 @@ class _ActivitiesOverViewDetailsScreenState
                       )
                     ],
                   ),
-                  // progressIndicator(
-                  //   currentStep: 50,
-                  //   colorWhite: false,
-                  //   width: 100,
-                  //   height: 100,
-                  // ),
                   CircularStepProgressIndicator(
                     totalSteps: 100,
                     currentStep: totalPercentageAvg ?? 0,
@@ -158,7 +153,7 @@ class _ActivitiesOverViewDetailsScreenState
   }
 
   Widget subTopicsCard(GetActivitiesOverviewActivities activities) {
-    dynamic value = activities.completed * 100;
+    dynamic value = activities.completed;
     int val = value.toInt();
     return Container(
       width: Get.width,

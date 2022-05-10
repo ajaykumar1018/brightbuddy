@@ -1,6 +1,8 @@
 import 'package:bright_kid/helpers/provider/auth_provider.dart';
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
 import 'package:bright_kid/localization/app_localization.dart';
+import 'package:bright_kid/ui/auth/login.dart';
+import 'package:bright_kid/ui/intro/onboarding.dart';
 import 'package:bright_kid/ui/intro/splash.dart';
 import 'package:bright_kid/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale;
+
   void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -86,7 +89,7 @@ class _MyAppState extends State<MyApp> {
           return supportedLocales.first;
         },
         debugShowCheckedModeBanner: false,
-        title: 'Bright Kid',
+        title: 'Bright Beep',
         theme: ThemeData(
           primarySwatch: createMaterialColor(themeColor),
           accentColor: createMaterialColor(themeColor),

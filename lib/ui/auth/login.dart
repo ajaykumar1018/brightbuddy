@@ -86,16 +86,16 @@ class _LoginViewState extends State<LoginView> {
                                   height: Get.width * .05,
                                 ),
                                 strokedText(
-                                    text: getTranslated(
-                                        context, "welcome_exclamation"),
-                                    fontSize: Get.width * .06,
+                                    text:
+                                        'Welcome to the Bright Kid: Concepts @ Home Learning Journey',
+                                    fontSize: Get.width * .05,
                                     color: themeColor,
                                     isProgressIndicator: false),
                                 SizedBox(
                                   height: Get.width * .05,
                                 ),
                                 Text(
-                                  "Hey! Welcome to the bright kid at home learning journey. Let's first sign in to begin!",
+                                  "Note : Please enter your email address used for registration in Concepts  @Home online program at the Learning Portal of Bridge Edge Edusystems.",
                                   style: MyTextStyle.mulish().copyWith(
                                       fontSize: Get.width * .04,
                                       color: lightBlack),

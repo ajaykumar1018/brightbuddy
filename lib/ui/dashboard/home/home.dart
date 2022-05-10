@@ -1,16 +1,29 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
+import 'package:bright_kid/helpers/services/api_request.dart';
+import 'package:bright_kid/helpers/services/api_url.dart';
 import 'package:bright_kid/helpers/services/show_messages.dart';
 import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
+import 'package:bright_kid/models/get_activities_overview_model.dart';
+import 'package:bright_kid/models/get_enrollment_model.dart';
+import 'package:bright_kid/ui/dashboard/home/all_craft_activities.dart';
 import 'package:bright_kid/ui/dashboard/home/over_view_screen.dart';
+import 'package:bright_kid/ui/dashboard/home/overview2.dart';
 import 'package:bright_kid/ui/dashboard/home/see_course_screen.dart';
+import 'package:bright_kid/ui/dashboard/home/see_course_screen2.dart';
+import 'package:bright_kid/ui/dashboard/home/see_course_screen3.dart';
 import 'package:bright_kid/ui/dashboard/home/start_activity_screen.dart';
+import 'package:bright_kid/ui/dashboard/home/start_activity_screen2.dart';
 import 'package:bright_kid/ui/dashboard/home/weekly_calendar_view.dart';
 import 'package:bright_kid/utils/colors.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
 import 'package:bright_kid/utils/images.dart';
 import 'package:bright_kid/utils/loader_class.dart';
+import 'package:http/http.dart' as http;
 import 'package:bright_kid/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,48 +46,44 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> calculateTotalAverage() async {
     await Provider.of<DashboardProvider>(context, listen: false)
-        .getEnrollmentFunc();
+        .getEnrollmentFunc()
+        .then((value) {
+      activitiesAvg = 0.0;
+      overAllAvg = 0;
+      getActivitiesOverviewList.forEach((e) {
+        // List ratingInside = e.activities.map((e) =>
+        //   e.completed * 100,
+        // ).toList();
+        double sumInside = e.activities.fold(0, (p, c) => p + c.completed);
+        // print((sumInside / e.activities.length) * 100);
+        if (e.activities.length != 0)
+          activitiesAvg += (sumInside / e.activities.length) * 100;
 
-    activitiesAvg = 0.0;
-    overAllAvg = 0;
-    getActivitiesOverviewList.forEach((e) {
-      // List ratingInside = e.activities.map((e) =>
-      //   e.completed * 100,
-      // ).toList();
-      double sumInside = e.activities.fold(0, (p, c) => p + c.completed);
-      print((sumInside / e.activities.length) * 100);
-      activitiesAvg += (sumInside / e.activities.length) * 100;
-
-      // if (sumInside > 0) {
-      //   double insideAverage = sumInside / ratingInside.length;
-      // }
-    });
-    Future.delayed(Duration(milliseconds: 600), () {
-      if (activitiesAvg > 0) {
-        overAllAvg = (activitiesAvg / getActivitiesOverviewList.length)
+        // if (sumInside > 0) {
+        //   double insideAverage = sumInside / ratingInside.length;
+        // }
+      });
+      if (activitiesAvg > 0 && getActivitiesOverviewList.length > 0) {
+        overAllAvg = (activitiesAvg / (getActivitiesOverviewList.length * 100))
             .ceilToDouble()
             .toInt();
         print(
             "overAll ==> $overAllAvg::: avg ==>$activitiesAvg::length ${getActivitiesOverviewList.length}");
-        setState(() {
-
-        });
+        setState(() {});
       } else {
         overAllAvg = 0;
       }
+
+      print("overall AVG is  : ");
+      print(overAllAvg);
     });
   }
 
   @override
   void initState() {
     calculateTotalAverage();
-
-    // double sum = ratings.fold(0, (p, c) => p + c);
-    // if (sum > 0) {
-    //   double average = sum / ratings.length;
-    //   totalPercentageAvg = average.toInt();
-    //   print(totalPercentageAvg);
-    // }
+    getEnrollmentFunc4();
+    getEnrollmentFunc5();
 
     super.initState();
   }
@@ -92,11 +101,188 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  bool isLoading = false;
+
+  Future getEnrollmentFunc4() async {
+    isLoading = true;
+    await apiRequest
+        .getEnrollment(loginData?.loginUser?.email ?? '')
+        .then((response) async {
+      if (response != false) {
+        getEnrollmentModel = GetEnrollmentModel.fromJson(response);
+        await getCraftActivities2(
+          '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+          getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+        );
+      } else {
+        isLoading = false;
+      }
+    });
+  }
+
+  Future getEnrollmentFunc5() async {
+    isLoading = true;
+    await apiRequest
+        .getEnrollment(loginData?.loginUser?.email ?? '')
+        .then((response) async {
+      if (response != false) {
+        getEnrollmentModel = GetEnrollmentModel.fromJson(response);
+        await getGiffyData2(
+          '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+          getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+        );
+      } else {
+        isLoading = false;
+      }
+    });
+  }
+
+  var craftData, giffyData;
+  int sum = 0, total = 0, craft_percentage = 0;
+  int sum1 = 0, total1 = 0, giffy_percentage = 0;
+  double percentage = 0;
+  double percentage2 = 0;
+  int intPercentage = 0, intPercentage1 = 0;
+  List craftActivityList = [];
+
+  Future getCraftActivities2(String email, int courseId) async {
+    isLoading = true;
+    await apiRequest.getCraftActivities(email, courseId).then((response) {
+      isLoading = false;
+      craftData = response;
+      if (response != false) {
+        getActivitiesOverviewList.clear();
+        response.forEach((res) {
+          int t = res['activities'].length;
+          for (int i = 0; i < t; i++) {
+            if (res['activities'][i]['completed'] == 1) sum++;
+            craftActivityList.add(res['activities'][i]);
+            total++;
+          }
+        });
+      }
+    });
+
+    setState(() {
+      double percentage = (sum / total);
+      double percentage2 = percentage * 100;
+      intPercentage = percentage2.round();
+    });
+  }
+
+  Future getGiffyData2(String email, int courseId) async {
+    isLoading = true;
+    await getGiffyData(email, courseId).then((response) {
+      isLoading = false;
+      giffyData = response;
+      print("GIFFYDATA");
+      print(giffyData);
+      if (response != false) {}
+    });
+
+    if (total1 == 0) {
+      setState(() {
+        double percentage = 0.0;
+        percentage = (0.00);
+        double percentage2 = percentage * 100;
+        intPercentage1 = percentage2.round();
+      });
+    } else {
+      setState(() {
+        double percentage = 0.0;
+        percentage = (sum1 / total1);
+        double percentage2 = percentage * 100;
+        intPercentage1 = percentage2.round();
+      });
+    }
+  }
+
+  Future getCraftActivities(String email, int courseId) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String url =
+          Apis.craftActivitiesList + "?email=$email&course_id=$courseId";
+      // print('url  : $url');
+      var response = await http.get(Uri.parse(url));
+      var jsonResponse = json.decode(response.body);
+      // print('response Craft :\n');
+      // print('this is body Craft : ${response.body}');
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        return false;
+      } else {
+        ShowMessageForApi.ofJsonInDialog(
+            "status code: ${response.statusCode}", true);
+        return false;
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
+    }
+    return false;
+  }
+
+  Future getGiffyData(String email, int courseId) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String url = Apis.giffy + "?email=$email&course_id=$courseId";
+      // print('url  : $url');
+      var response = await http.get(Uri.parse(url));
+      var jsonResponse = json.decode(response.body);
+      // print('response Craft :\n');
+      // print('this is body Craft : ${response.body}');
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        return false;
+      } else {
+        ShowMessageForApi.ofJsonInDialog(
+            "status code: ${response.statusCode}", true);
+        return false;
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
+    }
+    return false;
+  }
+
+  bool isLoading1 = false;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(builder: (context, provider, _) {
       return ModalProgressHUD(
-        inAsyncCall: provider.isLoading,
+        inAsyncCall: provider.isLoading || isLoading1,
         progressIndicator: MyLoader(),
         child: WillPopScope(
           onWillPop: onWillPop,
@@ -170,11 +356,6 @@ class _HomeViewState extends State<HomeView> {
                     SizedBox(height: Get.height * .04),
                     Row(
                       children: [
-                        strokedText(
-                            text: 'Course',
-                            fontSize: Get.width * .045,
-                            color: themeColor,
-                            isProgressIndicator: false),
                         Spacer(),
                         Image.asset(calendarIcon, scale: 1.8),
                         SizedBox(width: 5),
@@ -201,7 +382,13 @@ class _HomeViewState extends State<HomeView> {
                           children: [
                             subjectContainer(0, homeImage1),
                             SizedBox(height: 10),
-                            subjectContainer(1, homeImage2),
+                            subjectContainer(1, 'assets/images/Montessori.png'),
+                            SizedBox(height: 10),
+                            subjectContainerNurseryCraftActivities(
+                                1, 'assets/images/ArtnCarfts.png'),
+                            SizedBox(height: 10),
+                            subjectContainerNurseryBrightGiffy(
+                                0, 'assets/images/BrightGiffy.png'),
                             SizedBox(height: 20),
                           ],
                         ),
@@ -270,10 +457,12 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   Text(
                     index == 0
-                        ? getEnrollmentModel
-                                ?.getEnrollmenItems?.first?.courseName ??
-                            ''
-                        : "${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''} activities",
+                        ? 'Nursery : Concepts @ Home'
+                        : "Nursery : Montessori Activities",
+                    // ? getEnrollmentModel
+                    //         ?.getEnrollmenItems?.first?.courseName ??
+                    //     ''
+                    // : "${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''} activities",
                     textAlign: TextAlign.center,
                     style: MyTextStyle.mulishBlack().copyWith(
                         fontWeight: FontWeight.bold,
@@ -357,6 +546,302 @@ class _HomeViewState extends State<HomeView> {
                         color: lightBlue,
                         fontSize: Get.width * .04,
                         text: index == 1 ? "$overAllAvg%" : "$inPercentage%",
+                        // text: "100%",
+                        isProgressIndicator: true),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget subjectContainerNurseryCraftActivities(int index, String img) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      width: Get.width,
+      height: Get.height * .5,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Color(0xffF2F2F2), Color(0xffDDE7FB)],
+            begin: const FractionalOffset(0.0, 0.0),
+            end: const FractionalOffset(0.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp),
+        borderRadius: BorderRadius.circular(23),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff000000).withOpacity(.25),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: Offset(1, 2),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Container(
+            width: Get.width,
+            height: Get.height * .25,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(23),
+                  topRight: Radius.circular(23),
+                ),
+                image: DecorationImage(
+                  image: AssetImage(img),
+                  fit: BoxFit.fill,
+                )),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Nursery : Craft Activities",
+                    textAlign: TextAlign.center,
+                    style: MyTextStyle.mulishBlack().copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff314A72),
+                        fontSize: Get.width * .04),
+                  ),
+                  SizedBox(height: Get.height * .04),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      startCourseWidget(
+                        0,
+                        'See Progress',
+                        overViewIcon,
+                        SeeCourseScreen3(
+                          percentageCompleted: intPercentage,
+                          activitiesPercentage: intPercentage,
+                          courseName:
+                              '${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''}',
+                          courseId: getEnrollmentModel
+                                  ?.getEnrollmenItems?.first?.courseId ??
+                              0,
+                          homeScreenContainer: index,
+                          yashscreen: 3,
+                          data: craftData,
+                        ),
+                      ),
+                      startCourseWidget(
+                        1,
+                        'Start Activity',
+                        startCourseIcon,
+                        StartActivityScreen2(data: craftData),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isLoading1 = true;
+                          });
+                          craftActivityList.clear();
+                          getEnrollmentFunc4().then((value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllCraftActivities(
+                                        data: craftActivityList,
+                                      )),
+                            );
+                            setState(() {
+                              isLoading1 = false;
+                            });
+                          });
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/images/learning.png',
+                                  scale: 9),
+                              SizedBox(height: 4),
+                              Text(
+                                'My Crafts',
+                                style: MyTextStyle.mulish().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff314A72),
+                                    fontSize: Get.width * .033),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: Get.height * .19,
+            left: 0,
+            right: 0,
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: CircularStepProgressIndicator(
+                  totalSteps: 100,
+                  currentStep: index == 1 ? intPercentage : overAllAvg,
+                  stepSize: 10,
+                  gradientColor: LinearGradient(colors: [
+                    Color(0xffFDAF31),
+                    Color(0xffFDD060),
+                  ]),
+                  unselectedColor: Colors.white.withOpacity(.50),
+                  padding: 0,
+                  width: 80,
+                  height: 80,
+                  selectedStepSize: 17,
+                  child: Center(
+                    child: strokedText(
+                        color: lightBlue,
+                        fontSize: Get.width * .04,
+                        text: "$intPercentage%",
+                        // text: "100%",
+                        isProgressIndicator: true),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget subjectContainerNurseryBrightGiffy(int index, String img) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      width: Get.width,
+      height: Get.height * .5,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Color(0xffF2F2F2), Color(0xffDDE7FB)],
+            begin: const FractionalOffset(0.0, 0.0),
+            end: const FractionalOffset(0.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp),
+        borderRadius: BorderRadius.circular(23),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff000000).withOpacity(.25),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: Offset(1, 2),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Container(
+            width: Get.width,
+            height: Get.height * .25,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(23),
+                  topRight: Radius.circular(23),
+                ),
+                image: DecorationImage(
+                  image: AssetImage(img),
+                  fit: BoxFit.fill,
+                )),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Nursery : Bright Giffy",
+                    textAlign: TextAlign.center,
+                    style: MyTextStyle.mulishBlack().copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff314A72),
+                        fontSize: Get.width * .04),
+                  ),
+                  SizedBox(height: Get.height * .04),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      startCourseWidget(
+                          0,
+                          'See Overview',
+                          overViewIcon,
+                          OverViewScreen2(
+                            courseId: getEnrollmentModel
+                                    ?.getEnrollmenItems?.first?.courseId ??
+                                0,
+                            data: giffyData,
+                          )),
+                      startCourseWidget(
+                          1,
+                          'See Progress',
+                          startCourseIcon,
+                          SeeCourseScreen2(
+                            percentageCompleted: intPercentage1,
+                            activitiesPercentage: intPercentage1,
+                            courseName: 'Nursery : Bright Giffy',
+                            courseId: getEnrollmentModel
+                                    ?.getEnrollmenItems?.first?.courseId ??
+                                0,
+                            homeScreenContainer: index,
+                            data: giffyData,
+                            yashscreen: 4,
+                          )),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: Get.height * .19,
+            left: 0,
+            right: 0,
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: CircularStepProgressIndicator(
+                  totalSteps: 100,
+                  currentStep: index == 0 ? intPercentage1 : overAllAvg,
+                  stepSize: 10,
+                  gradientColor: LinearGradient(colors: [
+                    Color(0xffFDAF31),
+                    Color(0xffFDD060),
+                  ]),
+                  unselectedColor: Colors.white.withOpacity(.50),
+                  padding: 0,
+                  width: 80,
+                  height: 80,
+                  selectedStepSize: 17,
+                  child: Center(
+                    child: strokedText(
+                        color: lightBlue,
+                        fontSize: Get.width * .04,
+                        text: "$intPercentage1%",
                         // text: "100%",
                         isProgressIndicator: true),
                   ),

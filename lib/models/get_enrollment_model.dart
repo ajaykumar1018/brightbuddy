@@ -6,8 +6,11 @@ class GetEnrollmentModel {
 
   GetEnrollmentModel.fromJson(dynamic json) {
     if (json["items"] != null) {
+      // print("JSON : " + json);
       getEnrollmenItems = [];
+      print("YASH");
       json["items"].forEach((v) {
+        print(v);
         getEnrollmenItems.add(GetEnrollmenItems.fromJson(v));
       });
     }

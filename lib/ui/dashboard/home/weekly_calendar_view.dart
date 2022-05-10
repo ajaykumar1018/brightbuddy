@@ -1,6 +1,7 @@
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
 import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/models/weekly_calendar_model.dart';
+import 'package:bright_kid/ui/dashboard/home/individual_week.dart';
 import 'package:bright_kid/utils/colors.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/loader_class.dart';
@@ -18,24 +19,24 @@ class WeeklyCalendarView extends StatefulWidget {
 }
 
 class _WeeklyCalendarViewState extends State<WeeklyCalendarView> {
-
   @override
   void initState() {
-    Provider.of<DashboardProvider>(context, listen: false)
-        .weeklyCalendarFunc(
+    Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc(
       '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
-      getEnrollmentModel
-          ?.getEnrollmenItems?.first?.courseId ??
-          0,
+      getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+    );
+
+    Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc2(
+      '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+      getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
     );
 
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<DashboardProvider>(builder: (context, dashProvider, child){
+    return Consumer<DashboardProvider>(builder: (context, dashProvider, child) {
       return ModalProgressHUD(
         inAsyncCall: dashProvider.isLoading,
         progressIndicator: MyLoader(),
@@ -68,7 +69,7 @@ class _WeeklyCalendarViewState extends State<WeeklyCalendarView> {
                               height: 12,
                               margin: EdgeInsets.only(right: 5),
                               decoration: BoxDecoration(
-                                color:Color(0xffFDAF31),
+                                color: Color(0xffFDAF31),
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -86,7 +87,7 @@ class _WeeklyCalendarViewState extends State<WeeklyCalendarView> {
                               height: 12,
                               margin: EdgeInsets.only(right: 5),
                               decoration: BoxDecoration(
-                                color:Color(0xff008E8A),
+                                color: Color(0xff008E8A),
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -99,20 +100,30 @@ class _WeeklyCalendarViewState extends State<WeeklyCalendarView> {
                         ),
                       ],
                     ),
-
                   ],
                 ),
                 SizedBox(height: 20),
                 Expanded(
                   child: GridView.builder(
-                    itemCount: weeklyCalendarList?.length??0,
+                    itemCount: weeklyCalendarList?.length ?? 0,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       childAspectRatio: 0.7,
                       crossAxisSpacing: 6,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return _tracker(weeklyCalendarList[index]);
+                      return InkWell(
+                          onTap: () {
+                            print(weeklyCalendarList2[index].weekData);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => IndividualWeek(
+                                      data:
+                                          weeklyCalendarList2[index].weekData)),
+                            );
+                          },
+                          child: _tracker(weeklyCalendarList[index]));
                     },
                   ),
                 ),
@@ -125,29 +136,25 @@ class _WeeklyCalendarViewState extends State<WeeklyCalendarView> {
   }
 
   Widget _tracker(WeeklyCalendarModel model) {
-
     dynamic value1 = model.lessonProgress * 100;
     dynamic value2 = model.activityProgress * 100;
     int val1;
     int val2;
-    if(value1 >=  100){
+    if (value1 >= 100) {
       value1 = 100;
-      val1 =  value1.toInt();
+      val1 = value1.toInt();
+    } else {
+      val1 = value1.toInt();
     }
-    else{
-      val1 =  value1.toInt();
-    }
-    if(value2 >= 100){
+    if (value2 >= 100) {
       value2 = 100;
-      val2 =  value2.toInt();
+      val2 = value2.toInt();
+    } else {
+      val2 = value2.toInt();
     }
-    else{
-      val2 =  value2.toInt();
-    }
-
 
     return Container(
-      padding: EdgeInsets.only(left: 7 , right : 7, top: 20),
+      padding: EdgeInsets.only(left: 7, right: 7, top: 20),
       margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -211,7 +218,7 @@ class _WeeklyCalendarViewState extends State<WeeklyCalendarView> {
                         child: strokedText(
                             color: Colors.red,
                             fontSize: Get.width * .03,
-                            text: "${model?.dateRange??''}",
+                            text: "${model?.dateRange ?? ''}",
                             isProgressIndicator: true),
                       ),
                     ),

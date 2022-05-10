@@ -5,6 +5,7 @@ class WeeklyCalendarModel {
   int activitiesCompleted;
   double lessonProgress;
   int lessonsCompleted;
+  var weekData;
 
   WeeklyCalendarModel({
       this.week, 
@@ -12,7 +13,7 @@ class WeeklyCalendarModel {
       this.activityProgress, 
       this.activitiesCompleted, 
       this.lessonProgress, 
-      this.lessonsCompleted});
+      this.lessonsCompleted, this.weekData});
 
   WeeklyCalendarModel.fromJson(dynamic json) {
     week = json['week'];
@@ -21,6 +22,7 @@ class WeeklyCalendarModel {
     activitiesCompleted = json['activities_completed'];
     lessonProgress = json['lesson_progress'];
     lessonsCompleted = json['lessons_completed'];
+    weekData = json;
   }
 
   Map<String, dynamic> toJson() {

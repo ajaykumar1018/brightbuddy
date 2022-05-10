@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bright_kid/helpers/services/api_url.dart';
 import 'package:bright_kid/helpers/services/show_messages.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class ApiRequest {
   Future loginApi(String email, String password) async {
@@ -275,6 +278,85 @@ class ApiRequest {
     return false;
   }
 
+  Future getGiffyData(String email, int courseId) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String url = Apis.giffy + "?email=$email&course_id=$courseId";
+      print('url  : $url');
+      var response = await http.get(Uri.parse(url));
+      var jsonResponse = json.decode(response.body);
+      print('response:\n');
+      print('this is body : ${response.body}');
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        return false;
+      } else {
+        ShowMessageForApi.ofJsonInDialog(
+            "status code: ${response.statusCode}", true);
+        return false;
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
+    }
+    return false;
+  }
+
+  Future getCraftActivities(String email, int courseId) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String url =
+          Apis.craftActivitiesList + "?email=$email&course_id=$courseId";
+      // print('url  : $url');
+      var response = await http.get(Uri.parse(url));
+      var jsonResponse = json.decode(response.body);
+      // print('response Craft :\n');
+      // print('this is body Craft : ${response.body}');
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        return false;
+      } else {
+        ShowMessageForApi.ofJsonInDialog(
+            "status code: ${response.statusCode}", true);
+        return false;
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
+    }
+    return false;
+  }
+
   //
   //
   //
@@ -286,6 +368,10 @@ class ApiRequest {
     int time,
     String activityName,
   ) async {
+    // TODO: Geting present date
+    var now = new DateTime.now();
+    var formatter = new DateFormat('dd-MM-yyyy');
+    String formattedDate = formatter.format(now);
     try {
       bool isConnected = await checkInternet();
       if (!isConnected) {
@@ -300,6 +386,7 @@ class ApiRequest {
         "activity_code": "$activityCode",
         "timespent": "$time",
         "activity_name": "$activityName",
+        "date": "$formattedDate"
       };
       print('url  : $url');
       print('body ---- : $body');
@@ -333,6 +420,78 @@ class ApiRequest {
     return false;
   }
 
+  //SUBMIT ACTIVITY 2 for craft activity
+  Future submitActivity2(
+    String email,
+    int courseId,
+    String categoryId,
+    String activityCode,
+    var file,
+    String activityName,
+  ) async {
+    try {
+      String url = Apis.updateActivity2;
+      print('url : $url');
+
+      http.MultipartRequest request = http.MultipartRequest(
+        "POST",
+        Uri.parse(url),
+      );
+
+      request.fields.addAll({
+        'email': email,
+        'course_id': "$courseId",
+        'category_id': categoryId,
+        'activity_code': activityCode,
+        'activity_name': activityName
+      });
+
+      request.files.add(await http.MultipartFile.fromPath(
+        "file",
+        file.path,
+      ));
+      bool isConnected = await checkInternet();
+      if (isConnected) {
+        http.StreamedResponse response =
+            await request.send().timeout(Duration(seconds: 60), onTimeout: () {
+          ShowMessageForApi.snackBar("Loading ", "Request Time Out ", true);
+          return null;
+        });
+
+        print('server status code : ${response.statusCode}');
+        final responseBody = await response.stream.bytesToString();
+        Map jsonResponse = jsonDecode(responseBody);
+        print('jsonResponse : $jsonResponse');
+        if (response.statusCode == 200) {
+          return jsonResponse;
+        } else {
+          ShowMessageForApi.ofJsonInDialog(jsonResponse["message"], true);
+          return false;
+        }
+      } else {
+        ShowMessageForApi.inDialog('No Internet Connection', true);
+      }
+    } on SocketException {
+      ShowMessageForApi.inDialog('No Internet Connection', true);
+
+      print('No Internet connection');
+      return false;
+    } on HttpException catch (error) {
+      print(error);
+      ShowMessageForApi.inDialog('Couldn\'t find the results', true);
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      ShowMessageForApi.inDialog('Bad response format from server', true);
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print(value);
+    }
+    return false;
+  }
+
   //
   //
   //
@@ -343,7 +502,7 @@ class ApiRequest {
     File profilePic,
   }) async {
     try {
-      String url = Apis.profilePicUpload+"?email=$email";
+      String url = Apis.profilePicUpload + "?email=$email";
       print('url : $url');
 
       http.MultipartRequest request = http.MultipartRequest(
@@ -351,12 +510,14 @@ class ApiRequest {
         Uri.parse(url),
       );
 
-      request.files.add(
-          await http.MultipartFile.fromPath("file", profilePic.path));
+      request.files.add(await http.MultipartFile.fromPath(
+        "file",
+        profilePic.path,
+      ));
       bool isConnected = await checkInternet();
       if (isConnected) {
         http.StreamedResponse response =
-        await request.send().timeout(Duration(seconds: 60), onTimeout: () {
+            await request.send().timeout(Duration(seconds: 60), onTimeout: () {
           ShowMessageForApi.snackBar("Loading ", "Request Time Out ", true);
           return null;
         });
@@ -437,6 +598,45 @@ class ApiRequest {
     return false;
   }
 
+  Future weeklyTrackingFunc2(String email, int courseId) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String url = Apis.weeklyTracking2 + "?email=$email&course_id=$courseId";
+      print('url  : $url');
+      var response = await http.get(Uri.parse(url));
+      var jsonResponse = json.decode(response.body);
+      print('response:\n');
+      print('this is body : ${response.body}');
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        return false;
+      } else {
+        ShowMessageForApi.ofJsonInDialog(
+            "status code: ${response.statusCode}", true);
+        return false;
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
+    }
+    return false;
+  }
+
   Future getChapters(int courseId) async {
     try {
       bool isConnected = await checkInternet();
@@ -478,43 +678,43 @@ class ApiRequest {
     return false;
   }
 
-Future getChaptersLessonFun(String email, int courseId) async {
-  try {
-    bool isConnected = await checkInternet();
-    if (!isConnected) {
-      ShowMessageForApi.inDialog("No internet Connection", true);
+  Future getChaptersLessonFun(String email, int courseId) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String url = Apis.progressLesson + "?email=$email&course_id=$courseId";
+      var response = await http.get(Uri.parse(url));
+      var jsonResponse = json.decode(response.body);
+      print('response:\n');
+      print('this is body : ${response.body}');
+      if (response.statusCode == 200) {
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        return false;
+      } else {
+        ShowMessageForApi.ofJsonInDialog(
+            "status code: ${response.statusCode}", true);
+        return false;
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
       return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
     }
-    String url = Apis.progressLesson + "?email=$email&course_id=$courseId";
-    var response = await http.get(Uri.parse(url));
-    var jsonResponse = json.decode(response.body);
-    print('response:\n');
-    print('this is body : ${response.body}');
-    if (response.statusCode == 200) {
-      return jsonResponse;
-    } else if (response.statusCode == 400) {
-      ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
-      return false;
-    } else {
-      ShowMessageForApi.ofJsonInDialog(
-          "status code: ${response.statusCode}", true);
-      return false;
-    }
-  } on HttpException catch (error) {
-    print(error);
-    toast(Get.context, 'Couldn\'t find the results');
-    print("Couldn't find the post");
     return false;
-  } on FormatException catch (error) {
-    print(error);
-    toast(Get.context, 'Bad response format from server');
-    print("Bad response format");
-    return false;
-  } catch (value) {
-    print('value: $value');
   }
-  return false;
-}
 }
 
 Future<bool> checkInternet() async {

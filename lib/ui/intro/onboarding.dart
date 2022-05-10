@@ -17,55 +17,52 @@ class OnboardingView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(
-            flex: 4,
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: Get.height * .04,
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: Get.height * .04,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Image.asset(logo2, height: Get.height * .1),
+                ),
+                SizedBox(
+                  height: Get.width * .1,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Learning by\ndoing!',
+                        textAlign: TextAlign.center,
+                        style: MyTextStyle.babib().copyWith(
+                            fontSize: Get.width * .1,
+                            fontWeight: FontWeight.bold,
+                            color: themeColor),
+                      ),
+                      SizedBox(
+                        height: Get.width * .04,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.offAll(() => LoginView(),
+                              transition: Transition.rightToLeftWithFade,
+                              duration: Duration(milliseconds: 300));
+                        },
+                        child: gradientButton(
+                            height: Get.width * .1,
+                            width: Get.width * .3,
+                            text: getTranslated(context, "sign_in")),
+                      ),
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Image.asset(logo2, height: Get.height * .1),
-                  ),
-                  SizedBox(
-                    height: Get.width * .1,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Learning by\ndoing!',
-                          textAlign: TextAlign.center,
-                          style: MyTextStyle.babib().copyWith(
-                              fontSize: Get.width * .1,
-                              fontWeight: FontWeight.bold,
-                              color: themeColor),
-                        ),
-                        SizedBox(
-                          height: Get.width * .04,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.offAll(() => LoginView(),
-                                transition: Transition.rightToLeftWithFade,
-                                duration: Duration(milliseconds: 300));
-                          },
-                          child: gradientButton(
-                              height: Get.width * .1,
-                              width: Get.width * .3,
-                              text: getTranslated(context, "sign_in")),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           Expanded(

@@ -1,6 +1,7 @@
 import 'package:bright_kid/helpers/services/api_request.dart';
 import 'package:bright_kid/models/chapters_lesson_model.dart';
 import 'package:bright_kid/models/get_activities_overview_model.dart';
+import 'package:bright_kid/models/get_activities_overview_model2.dart';
 import 'package:bright_kid/models/get_chapters_model.dart';
 import 'package:bright_kid/models/get_courses_model.dart';
 import 'package:bright_kid/models/get_enrollment_model.dart';
@@ -32,9 +33,11 @@ LoginModel loginData = LoginModel();
 //for getting activities overview list
 
 List<GetActivitiesOverviewModel> getActivitiesOverviewList  =[];
+List<GetActivitiesOverviewModel2> getActivitiesOverviewList2  =[];
 
 //for getting calendar weekly
 List<WeeklyCalendarModel> weeklyCalendarList = [];
+List<WeeklyCalendarModel> weeklyCalendarList2 = [];
 
 // for home screen container one see progress chapter lesson
 
