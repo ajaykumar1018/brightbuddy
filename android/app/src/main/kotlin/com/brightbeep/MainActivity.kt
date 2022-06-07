@@ -1,4 +1,4 @@
-package com.bright.kid.bright_kid
+package com.brightbeep
 
 import io.flutter.embedding.android.FlutterActivity
 

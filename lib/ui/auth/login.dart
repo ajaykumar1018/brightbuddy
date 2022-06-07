@@ -144,17 +144,17 @@ class _LoginViewState extends State<LoginView> {
                                 SizedBox(
                                   height: Get.width * .02,
                                 ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: TextButton(
-                                      onPressed: () {},
-                                      child: strokedText(
-                                          fontSize: Get.width * .04,
-                                          color: orange,
-                                          text: getTranslated(
-                                              context, "forgot_password"),
-                                          isProgressIndicator: false)),
-                                ),
+                                // Align(
+                                //   alignment: Alignment.topRight,
+                                //   child: TextButton(
+                                //       onPressed: () {},
+                                //       child: strokedText(
+                                //           fontSize: Get.width * .04,
+                                //           color: orange,
+                                //           text: getTranslated(
+                                //               context, "forgot_password"),
+                                //           isProgressIndicator: false)),
+                                // ),
                                 SizedBox(
                                   height: Get.width * .05,
                                 ),

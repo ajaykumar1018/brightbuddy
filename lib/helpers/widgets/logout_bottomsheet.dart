@@ -79,7 +79,18 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet> {
                       children: [
                         (loginData?.loginUser?.profilePic == '' ||
                                 loginData?.loginUser?.profilePic == null)
-                            ? AssetImage(dp)
+                        ? Image.asset(dp)
+                        // ? Container(
+                        //   decoration: BoxDecoration(
+                        //     image: DecorationImage(
+                        //       image: AssetImage(
+                        //           dp),
+                        //       fit: BoxFit.cover,
+                        //     ),
+                        //     //shape: BoxShape.circle,
+                        //   ),
+                        // )
+                            // ? AssetImage(dp)
                             : Container(
                                 width: 70,
                                 height: 70,

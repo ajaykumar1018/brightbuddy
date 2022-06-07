@@ -158,14 +158,14 @@ class ApiRequest {
         ShowMessageForApi.inDialog("No internet Connection", true);
         return false;
       }
-      String url = Apis.enrollments + "?query[email]=$email";
+      String url = Apis.enrollments + "?email=$email";
       var response = await http.get(
         Uri.parse(url),
         headers: HeaderParameter.headers(),
       );
       var jsonResponse = json.decode(response.body);
       print('response:\n');
-      print('this is body : ${response.body}');
+      print('this is body of getenrollment : ${response.body}');
       if (response.statusCode == 200) {
         return jsonResponse;
       } else if (response.statusCode == 400) {
@@ -209,7 +209,7 @@ class ApiRequest {
       );
       var jsonResponse = json.decode(response.body);
       print('response:\n');
-      print('this is body : ${response.body}');
+      print('this is body of getcourses : ${response.body}');
       if (response.statusCode == 200) {
         return jsonResponse;
       } else if (response.statusCode == 400) {
@@ -251,7 +251,7 @@ class ApiRequest {
       var response = await http.get(Uri.parse(url));
       var jsonResponse = json.decode(response.body);
       print('response:\n');
-      print('this is body : ${response.body}');
+      print('this is body of get activies overview list : ${response.body}');
       if (response.statusCode == 200) {
         return jsonResponse;
       } else if (response.statusCode == 400) {
@@ -290,7 +290,7 @@ class ApiRequest {
       var response = await http.get(Uri.parse(url));
       var jsonResponse = json.decode(response.body);
       print('response:\n');
-      print('this is body : ${response.body}');
+      print('this is body of getgiffydata : ${response.body}');
       if (response.statusCode == 200) {
         return jsonResponse;
       } else if (response.statusCode == 400) {
@@ -393,7 +393,7 @@ class ApiRequest {
       var response = await http.post(Uri.parse(url), body: body);
       var jsonResponse = json.decode(response.body);
       print('response:\n');
-      print('this is body : ${response.body}');
+      print('this is body of submitactiviy : ${response.body}');
       if (response.statusCode == 200) {
         return jsonResponse;
       } else if (response.statusCode == 400) {
