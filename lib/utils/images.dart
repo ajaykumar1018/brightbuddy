@@ -54,7 +54,10 @@ var changePasswordIcon = "assets/images/changePasswordIcon.png";
 var changePasswordMobileIcon = "assets/images/changePasswordMobileIcon.png";
 var congratulationIcon = "assets/images/congratulationIcon.png";
 var startActivityImage = "assets/images/startActivityImage.png";
-var activitiesOverViewDetailImage = "assets/images/activitiesOverViewDetailImage.png";
+var activitiesOverViewDetailImage =
+    "assets/images/activitiesOverViewDetailImage.png";
 var elephant = "assets/images/elephant.png";
 var calendarIcon = "assets/images/calendar.png";
 var cameraIcon = "assets/images/cameraIcon.png";
+var arScannerImage = "assets/images/ARScanner.png";
+var camScanIcon = "assets/images/Orix-camera-add.png";

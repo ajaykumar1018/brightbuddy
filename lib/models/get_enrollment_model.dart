@@ -103,6 +103,7 @@ class GetEnrollmenItems {
   String startedAt;
   String activatedAt;
   String updatedAt;
+  String giffyPercentageCompleted;
 
   GetEnrollmenItems(
       {this.id,
@@ -120,7 +121,8 @@ class GetEnrollmenItems {
       this.completed,
       this.startedAt,
       this.activatedAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.giffyPercentageCompleted});
 
   GetEnrollmenItems.fromJson(dynamic json) {
     id = json["id"];
@@ -139,6 +141,7 @@ class GetEnrollmenItems {
     startedAt = json["started_at"];
     activatedAt = json["activated_at"];
     updatedAt = json["updated_at"];
+    giffyPercentageCompleted = json["giffy_percentage_completed"];
   }
 
   Map<String, dynamic> toJson() {
@@ -159,6 +162,7 @@ class GetEnrollmenItems {
     map["started_at"] = startedAt;
     map["activated_at"] = activatedAt;
     map["updated_at"] = updatedAt;
+    map["giffy_percentage_completed"] = giffyPercentageCompleted;
     return map;
   }
 }

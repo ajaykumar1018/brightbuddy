@@ -31,6 +31,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import 'package:device_apps/device_apps.dart';
+import 'package:launch_review/launch_review.dart';
+
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -144,6 +147,7 @@ class _HomeViewState extends State<HomeView> {
   double percentage2 = 0;
   int intPercentage = 0, intPercentage1 = 0;
   List craftActivityList = [];
+  var enrolled_course_name;
 
   Future getCraftActivities2(String email, int courseId) async {
     isLoading = true;
@@ -364,12 +368,12 @@ class _HomeViewState extends State<HomeView> {
                             Get.to(() => WeeklyCalendarView());
                           },
                           child: Text(
-                            'weekly calendar',
+                            'Weekly Tracking',
                             style: MyTextStyle.mulishBlack().copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: Get.width * .045,
                               color: themeColor,
-                              decoration: TextDecoration.underline,
+                              //decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
@@ -389,6 +393,9 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(height: 10),
                             subjectContainerNurseryBrightGiffy(
                                 0, 'assets/images/BrightGiffy.png'),
+                            SizedBox(height: 10),
+                            subjectContainerScanner(
+                                0, 'assets/images/ARScanner.png'),
                             SizedBox(height: 20),
                           ],
                         ),
@@ -405,6 +412,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget subjectContainer(int index, String img) {
+    enrolled_course_name =
+        '${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''}'
+            .split(":")[0];
     double percentage = double.parse(
         getEnrollmentModel?.getEnrollmenItems?.first?.percentageCompleted ??
             '0.0');
@@ -457,8 +467,8 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   Text(
                     index == 0
-                        ? 'Nursery : Concepts @ Home'
-                        : "Nursery : Montessori Activities",
+                        ? '$enrolled_course_name :  Concepts\nRevision & Practice Tracker'
+                        : "$enrolled_course_name :  Montessori Activities\nRevision & Practice Tracker",
                     // ? getEnrollmentModel
                     //         ?.getEnrollmenItems?.first?.courseName ??
                     //     ''
@@ -559,6 +569,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget subjectContainerNurseryCraftActivities(int index, String img) {
+    enrolled_course_name =
+        '${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''}'
+            .split(":")[0];
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: Get.width,
@@ -605,7 +618,7 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Nursery : Craft Activities",
+                    "$enrolled_course_name :  Craft Activities\nPractice Tracking",
                     textAlign: TextAlign.center,
                     style: MyTextStyle.mulishBlack().copyWith(
                         fontWeight: FontWeight.bold,
@@ -725,6 +738,16 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget subjectContainerNurseryBrightGiffy(int index, String img) {
+    enrolled_course_name =
+        '${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''}'
+            .split(":")[0];
+    double percentageBrightGiffy = double.parse(getEnrollmentModel
+            ?.getEnrollmenItems?.first?.giffyPercentageCompleted ??
+        '0.0');
+    print("percentageBrightGiffy: $percentageBrightGiffy");
+    double percentageBrightGiffy2 = percentageBrightGiffy * 100;
+    int inPercentageBrightGiffy = percentageBrightGiffy2.round();
+    print("BRIGHT GOFFY PERCENTAGE: $inPercentageBrightGiffy");
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: Get.width,
@@ -771,7 +794,7 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Nursery : Bright Giffy",
+                    "$enrolled_course_name :  Interactive Fun Learning\nPractice Tracker",
                     textAlign: TextAlign.center,
                     style: MyTextStyle.mulishBlack().copyWith(
                         fontWeight: FontWeight.bold,
@@ -797,9 +820,11 @@ class _HomeViewState extends State<HomeView> {
                           'See Progress',
                           startCourseIcon,
                           SeeCourseScreen2(
-                            percentageCompleted: intPercentage1,
-                            activitiesPercentage: intPercentage1,
-                            courseName: 'Nursery : Bright Giffy',
+                            percentageCompleted: inPercentageBrightGiffy,
+                            activitiesPercentage: inPercentageBrightGiffy,
+                            // percentageCompleted: intPercentage1,
+                            // activitiesPercentage: intPercentage1,
+                            courseName: '$enrolled_course_name :  Bright Giffy',
                             courseId: getEnrollmentModel
                                     ?.getEnrollmenItems?.first?.courseId ??
                                 0,
@@ -826,7 +851,9 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 child: CircularStepProgressIndicator(
                   totalSteps: 100,
-                  currentStep: index == 0 ? intPercentage1 : overAllAvg,
+                  // currentStep: index == 0 ? intPercentage1 : overAllAvg,
+                  currentStep:
+                      index == 0 ? inPercentageBrightGiffy : overAllAvg,
                   stepSize: 10,
                   gradientColor: LinearGradient(colors: [
                     Color(0xffFDAF31),
@@ -841,7 +868,8 @@ class _HomeViewState extends State<HomeView> {
                     child: strokedText(
                         color: lightBlue,
                         fontSize: Get.width * .04,
-                        text: "$intPercentage1%",
+                        // text: "$intPercentage1%",
+                        text: "$inPercentageBrightGiffy%",
                         // text: "100%",
                         isProgressIndicator: true),
                   ),
@@ -850,6 +878,157 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget subjectContainerScanner(int index, String img) {
+    enrolled_course_name =
+        '${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''}'
+            .split(":")[0];
+    double percentageBrightGiffy = double.parse(getEnrollmentModel
+            ?.getEnrollmenItems?.first?.giffyPercentageCompleted ??
+        '0.0');
+    print("percentageBrightGiffy: $percentageBrightGiffy");
+    double percentageBrightGiffy2 = percentageBrightGiffy * 100;
+    int inPercentageBrightGiffy = percentageBrightGiffy2.round();
+    print("BRIGHT GOFFY PERCENTAGE: $inPercentageBrightGiffy");
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      width: Get.width,
+      height: Get.height * .5,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Color(0xffF2F2F2), Color(0xffDDE7FB)],
+            begin: const FractionalOffset(0.0, 0.0),
+            end: const FractionalOffset(0.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp),
+        borderRadius: BorderRadius.circular(23),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff000000).withOpacity(.25),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: Offset(1, 2),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Container(
+            width: Get.width,
+            height: Get.height * .25,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(23),
+                  topRight: Radius.circular(23),
+                ),
+                image: DecorationImage(
+                  image: AssetImage(img),
+                  fit: BoxFit.fill,
+                )),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "$enrolled_course_name :  Scan, Solve & Learn\nAnytime, Anywhere Teacher",
+                    textAlign: TextAlign.center,
+                    style: MyTextStyle.mulishBlack().copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff314A72),
+                        fontSize: Get.width * .04),
+                  ),
+                  SizedBox(height: Get.height * .04),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [openApp("Scan Now", camScanIcon)],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Positioned(
+          //   top: Get.height * .19,
+          //   left: 0,
+          //   right: 0,
+          //   child: Align(
+          //     alignment: Alignment.center,
+          //     child: Container(
+          //       decoration: BoxDecoration(
+          //         color: Colors.white,
+          //         shape: BoxShape.circle,
+          //       ),
+          //       child: CircularStepProgressIndicator(
+          //         totalSteps: 100,
+          //         currentStep:
+          //             index == 0 ? inPercentageBrightGiffy : overAllAvg,
+          //         stepSize: 10,
+          //         gradientColor: LinearGradient(colors: [
+          //           Color(0xffFDAF31),
+          //           Color(0xffFDD060),
+          //         ]),
+          //         unselectedColor: Colors.white.withOpacity(.50),
+          //         padding: 0,
+          //         width: 80,
+          //         height: 80,
+          //         selectedStepSize: 17,
+          //         child: Center(
+          //           child: strokedText(
+          //               color: lightBlue,
+          //               fontSize: Get.width * .04,
+          //               // text: "$intPercentage1%",
+          //               text: "$inPercentageBrightGiffy%",
+          //               // text: "100%",
+          //               isProgressIndicator: true),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+
+  void appChecker() async {
+    bool isInstalled = await DeviceApps.isAppInstalled('com.zappar.Zappar');
+    if (isInstalled == true) {
+      DeviceApps.openApp('com.zappar.Zappar');
+    } else {
+      LaunchReview.launch(androidAppId: "com.zappar.Zappar");
+    }
+  }
+
+  Widget openApp(String text, image) {
+    return GestureDetector(
+      onTap: () {
+        // Get.to(() => screen);
+        appChecker();
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(image, scale: 4),
+            SizedBox(height: 4),
+            Text(
+              text,
+              style: MyTextStyle.mulish().copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff314A72),
+                  fontSize: Get.width * .033),
+            ),
+          ],
+        ),
       ),
     );
   }
