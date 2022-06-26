@@ -58,6 +58,12 @@ var activitiesOverViewDetailImage =
     "assets/images/activitiesOverViewDetailImage.png";
 var elephant = "assets/images/elephant.png";
 var calendarIcon = "assets/images/calendar.png";
+var calendarMonthIcon = "assets/images/calendarMonthIcon.png";
+var noticeBoardIcon = "assets/images/noticeBoardIcon.png";
+var messageIcon = "assets/images/messageIcon.png";
+var bookCheckIcon = "assets/images/bookCheckIcon.png";
+var vectorIcon = "assets/images/vector.png";
+var exclamationIcon = "assets/images/exclamation.png";
 var cameraIcon = "assets/images/cameraIcon.png";
 var arScannerImage = "assets/images/ARScanner.png";
 var camScanIcon = "assets/images/Orix-camera-add.png";

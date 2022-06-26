@@ -10,6 +10,8 @@ import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
 import 'package:bright_kid/models/get_activities_overview_model.dart';
 import 'package:bright_kid/models/get_enrollment_model.dart';
 import 'package:bright_kid/ui/dashboard/home/all_craft_activities.dart';
+import 'package:bright_kid/ui/dashboard/home/mont_library_screen.dart';
+import 'package:bright_kid/ui/dashboard/home/notice_board_view.dart';
 import 'package:bright_kid/ui/dashboard/home/over_view_screen.dart';
 import 'package:bright_kid/ui/dashboard/home/overview2.dart';
 import 'package:bright_kid/ui/dashboard/home/see_course_screen.dart';
@@ -359,23 +361,138 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     SizedBox(height: Get.height * .04),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Spacer(),
-                        Image.asset(calendarIcon, scale: 1.8),
-                        SizedBox(width: 5),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => WeeklyCalendarView());
-                          },
-                          child: Text(
-                            'Weekly Tracking',
-                            style: MyTextStyle.mulishBlack().copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: Get.width * .045,
-                              color: themeColor,
-                              //decoration: TextDecoration.underline,
+                        // Spacer(),
+                        Column(
+                          children: <Widget>[
+                            Image.asset(
+                              bookCheckIcon,
                             ),
-                          ),
+                            SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => MontLibraryScreen());
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'Mont.',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                Text(
+                                  'Library',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                )
+                              ]),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Image.asset(
+                              messageIcon,
+                            ),
+                            SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => WeeklyCalendarView());
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'Messages',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Image.asset(
+                              noticeBoardIcon,
+                            ),
+                            SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => NoticeBoardView());
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'Notice',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                Text(
+                                  'Board',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                )
+                              ]),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Image.asset(
+                              calendarMonthIcon,
+                            ),
+                            SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => WeeklyCalendarView());
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'Weekly',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                Text(
+                                  'Tracking',
+                                  style: MyTextStyle.mulishBlack().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Get.width * .045,
+                                    color: themeColor,
+
+                                    //decoration: TextDecoration.underline,
+                                  ),
+                                )
+                              ]),
+                            ),
+                          ],
                         ),
                       ],
                     ),

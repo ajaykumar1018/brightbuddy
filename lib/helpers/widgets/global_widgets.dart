@@ -51,16 +51,16 @@ Widget globalAppBar(String title) {
         Get.back();
       },
       child: Image.asset(
-        back,
-        scale: 4,
+        vectorIcon,
+        scale: 1,
       ),
     ),
     centerTitle: true,
-    title: strokedText(
-        text: title,
-        fontSize: Get.width * .05,
-        color: themeColor,
-        isProgressIndicator: false),
+    // title: strokedText(
+    //     text: title,
+    //     fontSize: Get.width * .05,
+    //     color: themeColor,
+    //     isProgressIndicator: false),
   );
 }
 

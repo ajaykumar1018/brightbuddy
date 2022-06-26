@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:bright_kid/helpers/services/api_url.dart';
 import 'package:bright_kid/helpers/services/show_messages.dart';
+import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,18 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class ApiRequest {
+  Future getPost() async {
+    var client = http.Client();
+
+    var uri = Uri.parse('https://jsonplaceholder.typicode.com/posts');
+
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      var json = response.body;
+      return postFromJson(json);
+    }
+  }
+
   Future loginApi(String email, String password) async {
     try {
       bool isConnected = await checkInternet();
