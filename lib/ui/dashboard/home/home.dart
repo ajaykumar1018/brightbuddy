@@ -9,6 +9,7 @@ import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
 import 'package:bright_kid/models/get_activities_overview_model.dart';
 import 'package:bright_kid/models/get_enrollment_model.dart';
+import 'package:bright_kid/models/notice_model.dart';
 import 'package:bright_kid/ui/dashboard/home/all_craft_activities.dart';
 import 'package:bright_kid/ui/dashboard/home/mont_library_screen.dart';
 import 'package:bright_kid/ui/dashboard/home/notice_board_view.dart';
@@ -32,6 +33,7 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:badges/badges.dart';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:launch_review/launch_review.dart';
@@ -43,7 +45,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   TextEditingController searchController = TextEditingController();
-
+  int noticeCount;
+  List<Notice> notices;
   int secondContainerTotalPercentageActivities;
 
   int overAllAvg = 0;
@@ -89,8 +92,28 @@ class _HomeViewState extends State<HomeView> {
     calculateTotalAverage();
     getEnrollmentFunc4();
     getEnrollmentFunc5();
+    getNotices();
 
     super.initState();
+  }
+
+  getNotices() async {
+    notices = await ApiRequest().getNotices(
+        loginData?.loginUser?.schoolCode,
+        loginData?.loginUser?.email,
+        loginData?.loginUser?.role,
+        loginData?.loginUser?.level);
+    if (notices != null) {
+      setState(() {
+        notices = notices.where((element) => !element.acknowledgment).toList();
+        noticeCount = notices.length;
+      });
+    } else {
+      notices = [];
+      setState(() {
+        noticeCount = 0;
+      });
+    }
   }
 
   String greeting() {
@@ -426,9 +449,20 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         Column(
                           children: <Widget>[
-                            Image.asset(
-                              noticeBoardIcon,
-                            ),
+                            noticeCount != null && noticeCount > 0
+                                ? Badge(
+                                    badgeContent: Text(
+                                      noticeCount.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    badgeColor: Color.fromRGBO(190, 2, 2, 1),
+                                    child: Image.asset(
+                                      noticeBoardIcon,
+                                    ),
+                                  )
+                                : Image.asset(
+                                    noticeBoardIcon,
+                                  ),
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {

@@ -1,13 +1,32 @@
 import 'package:bright_kid/utils/colors.dart';
+import 'package:bright_kid/utils/images.dart';
 import 'package:bright_kid/utils/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MontLibraryDetails extends StatelessWidget {
-  const MontLibraryDetails({Key key}) : super(key: key);
+  const MontLibraryDetails(
+      {Key key, this.title, this.issueDate, this.dueDate, this.returnDate})
+      : super(key: key);
+
+  final String title;
+  final DateTime issueDate;
+  final DateTime dueDate;
+  final DateTime returnDate;
+
+  String get getDue {
+    String color;
+    if (dueDate.compareTo(DateTime.now()) > 0) {
+      color = 'green';
+    } else {
+      color = 'red';
+    }
+    return color;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +39,7 @@ class MontLibraryDetails extends StatelessWidget {
           Container(
             width: double.infinity,
             child: Text(
-              '14/22 12:43',
+              DateFormat('dd/MM/yy hh:mm').format(issueDate),
               textAlign: TextAlign.end,
             ),
           ),
@@ -30,8 +49,8 @@ class MontLibraryDetails extends StatelessWidget {
           Row(
             children: [
               Container(
-                child: Image.network(
-                  'https://static.wikia.nocookie.net/batman/images/f/f9/Heath_Ledger_as_the_Joker.JPG/revision/latest?cb=20211006123111',
+                child: Image.asset(
+                  defaultImage,
                   height: 100,
                   width: 100,
                   fit: BoxFit.cover,
@@ -44,7 +63,7 @@ class MontLibraryDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Product name',
+                    title,
                     style: MyTextStyle.mulishBlack().copyWith(
                       fontWeight: FontWeight.bold,
                       fontSize: Get.width * .04,
@@ -53,7 +72,8 @@ class MontLibraryDetails extends StatelessWidget {
                       //decoration: TextDecoration.underline,
                     ),
                   ),
-                  Text('body text...')
+                  Text('Date issued : ' +
+                      DateFormat('dd/MM/yy').format(issueDate))
                 ],
               )
             ],
@@ -61,12 +81,23 @@ class MontLibraryDetails extends StatelessWidget {
           SizedBox(
             height: 50,
           ),
-          Container(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text('Due for Return : 22/11/22'),
-            ),
-          )
+          returnDate == null
+              ? Container(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: getDue == 'green' ? Colors.green : Colors.red),
+                    onPressed: () {},
+                    child: Text('Due for Return : ' +
+                        DateFormat('dd/MM/yy').format(dueDate)),
+                  ),
+                )
+              : Container(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Due for Return : ' +
+                        DateFormat('dd/MM/yy').format(returnDate)),
+                  ),
+                ),
         ],
       ),
     );

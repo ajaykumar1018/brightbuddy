@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:bright_kid/helpers/services/api_url.dart';
 import 'package:bright_kid/helpers/services/show_messages.dart';
+import 'package:bright_kid/models/mont_lib_model.dart';
+import 'package:bright_kid/models/notice_model.dart';
 import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
@@ -23,6 +25,96 @@ class ApiRequest {
       var json = response.body;
       return postFromJson(json);
     }
+  }
+
+  Future getNotices(
+      String schoolCode, String email, String role, String level) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      var client = http.Client();
+      String uri = Apis.notices;
+      var url = Uri.parse(uri +
+          '?school_code=$schoolCode&email=$email&role=$role&level=$level');
+      var response = await client.get(url);
+
+      if (response.statusCode == 200) {
+        print(response);
+        var json = response.body;
+        return noticeFromJson(json);
+      } else {
+        print(response.reasonPhrase);
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future getMontLib(String email, String level, String schoolCode) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      var client = http.Client();
+      String uri = Apis.mountlib;
+      var url = Uri.parse(uri + '/$email/$level/$schoolCode');
+      print(url);
+      var response = await client.get(url);
+
+      if (response.statusCode == 200) {
+        print(response);
+        var json = response.body;
+        return montLibFromJson(json);
+      } else {
+        print(response.reasonPhrase);
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future acknowledgeNotice(String schoolCode, String email, int id) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      String uri = Apis.noticeAck;
+      var url = Uri.parse(uri + '/$schoolCode/$email/$id');
+      var response = await http.put(url);
+      var jsonResponse = json.decode(response.body);
+      print(url);
+      if (response.statusCode == 200) {
+        if (jsonResponse['code'] == 200) {
+          return jsonResponse;
+        } else if (jsonResponse['code'] == 201) {
+          return jsonResponse;
+        } else if (jsonResponse['code'] == 204) {
+          ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        } else if (jsonResponse['code'] == 401) {
+          ShowMessageForApi.ofJsonInDialog(jsonResponse, true);
+        }
+      }
+    } on HttpException catch (error) {
+      print(error);
+      toast(Get.context, 'Couldn\'t find the results');
+      print("Couldn't find the post");
+      return false;
+    } on FormatException catch (error) {
+      print(error);
+      toast(Get.context, 'Bad response format from server');
+      print("Bad response format");
+      return false;
+    } catch (value) {
+      print('value: $value');
+    }
+    return false;
   }
 
   Future loginApi(String email, String password) async {

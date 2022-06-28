@@ -64,6 +64,7 @@ var messageIcon = "assets/images/messageIcon.png";
 var bookCheckIcon = "assets/images/bookCheckIcon.png";
 var vectorIcon = "assets/images/vector.png";
 var exclamationIcon = "assets/images/exclamation.png";
+var defaultImage = "assets/images/default_image.png";
 var cameraIcon = "assets/images/cameraIcon.png";
 var arScannerImage = "assets/images/ARScanner.png";
 var camScanIcon = "assets/images/Orix-camera-add.png";

@@ -8,16 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MontLibraryItem extends StatelessWidget {
-  final int id;
   final String title;
-  final String body;
-  const MontLibraryItem(
-      {Key key, @required this.id, @required this.title, @required this.body})
-      : super(key: key);
+  final DateTime issueDate;
+  final DateTime dueDate;
+  final DateTime returnDate;
+  const MontLibraryItem({
+    Key key,
+    @required this.title,
+    @required this.issueDate,
+    @required this.dueDate,
+    @required this.returnDate,
+  }) : super(key: key);
 
-  void selectedMontLibrary(BuildContext context) {
+  void selectedMontLibrary(BuildContext context, String title,
+      DateTime issueDate, DateTime dueDate, DateTime returnDate) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -25,41 +32,61 @@ class MontLibraryItem extends StatelessWidget {
         )),
         context: context,
         builder: (_) {
-          return MontLibraryDetails();
+          return MontLibraryDetails(
+            title: title,
+            issueDate: issueDate,
+            dueDate: dueDate,
+            returnDate: returnDate,
+          );
         });
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => selectedMontLibrary(context),
-      child: Positioned(
-        child: Card(
-          color: Color.fromRGBO(220, 231, 251, 1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-          elevation: 0,
-          child: Expanded(
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: Image.asset(
-                      bookCheckIcon,
-                      scale: .6,
+      onTap: () =>
+          selectedMontLibrary(context, title, issueDate, dueDate, returnDate),
+      child: Card(
+        color: returnDate == null
+            ? Color.fromRGBO(220, 231, 251, 1)
+            : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+        elevation: 0,
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(top: 5, right: 5),
+              child: Text(
+                DateFormat('dd/MM/yy hh:mm').format(issueDate),
+                textAlign: TextAlign.end,
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 15),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      child: Image.asset(
+                        bookCheckIcon,
+                        scale: .6,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 300,
+                        width: Get.width * .5,
                         child: Text(
                           title,
                           style: MyTextStyle.mulishBlack().copyWith(
@@ -73,19 +100,19 @@ class MontLibraryItem extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: 300,
+                        width: Get.width * .5,
                         child: Text(
-                          body,
+                          '',
                           textAlign: TextAlign.start,
                           style: TextStyle(overflow: TextOverflow.ellipsis),
                         ),
                       ),
                     ],
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -26,13 +26,26 @@ class LoginUser {
   String name;
   String email;
   String profilePic;
+  String schoolCode;
+  String level;
+  String role;
 
-  LoginUser({this.name, this.email, this.profilePic});
+  LoginUser({
+    this.name,
+    this.email,
+    this.profilePic,
+    this.schoolCode,
+    this.level,
+    this.role,
+  });
 
   LoginUser.fromJson(dynamic json) {
     name = json["name"];
     email = json["email"];
     profilePic = json["profile_pic"];
+    schoolCode = json["school_code"];
+    level = json["level"];
+    role = json["role"];
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +53,9 @@ class LoginUser {
     map["name"] = name;
     map["email"] = email;
     map["profile_pic"] = profilePic;
+    map["school_code"] = schoolCode;
+    map["level"] = level;
+    map["role"] = role;
     return map;
   }
 }

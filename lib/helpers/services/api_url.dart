@@ -2,6 +2,9 @@ class Apis {
   static String baseUrl = 'https://api.thinkific.com/api/public/v1/';
   static String loginApiUrl = 'http://101.53.133.207:80/';
   static String login = loginApiUrl + 'auth/login';
+  static String notices = loginApiUrl + 'notices/all';
+  static String noticeAck = loginApiUrl + 'notices/ack';
+  static String mountlib = loginApiUrl + 'montlib/find';
   static String setPassword = loginApiUrl + 'auth/password/set';
   static String changePassword = loginApiUrl + 'auth/password/change';
   static String enrollments = loginApiUrl + 'auth/enrollment';

@@ -2,6 +2,7 @@ import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
 import 'package:bright_kid/helpers/services/api_request.dart';
 import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
+import 'package:bright_kid/models/notice_model.dart';
 import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/ui/dashboard/home/notice_board_item.dart';
 import 'package:bright_kid/utils/colors.dart';
@@ -26,6 +27,7 @@ class NoticeBoardView extends StatefulWidget {
 
 class _NoticeBoardViewState extends State<NoticeBoardView> {
   List<Post> posts;
+  List<Notice> notices;
   var isLoaded = false;
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _NoticeBoardViewState extends State<NoticeBoardView> {
     );
 
     getData();
+    getNotices();
     super.initState();
   }
 
@@ -49,6 +52,23 @@ class _NoticeBoardViewState extends State<NoticeBoardView> {
       setState(() {
         isLoaded = true;
       });
+    } else {
+      posts = [];
+    }
+  }
+
+  getNotices() async {
+    notices = await ApiRequest().getNotices(
+        loginData?.loginUser?.schoolCode,
+        loginData?.loginUser?.email,
+        loginData?.loginUser?.role,
+        loginData?.loginUser?.level);
+    if (notices != null) {
+      setState(() {
+        isLoaded = true;
+      });
+    } else {
+      notices = [];
     }
   }
 
@@ -118,16 +138,23 @@ class _NoticeBoardViewState extends State<NoticeBoardView> {
                   child: Visibility(
                 visible: isLoaded,
                 child: ListView.builder(
-                  itemCount: posts?.length,
+                  itemCount: notices?.length,
                   itemBuilder: (context, index) {
                     return NoticeBoardItem(
-                      title: posts[index].title,
-                      body: posts[index].body,
-                      id: posts[index].id,
+                      title: notices[index].title,
+                      body: notices[index].body,
+                      id: notices[index].id,
+                      dateTime: notices[index].createdAt,
+                      imageUrl: notices[index].attachment,
+                      acknowledgment: notices[index].acknowledgment,
                     );
                   },
                 ),
-                replacement: Center(child: Text('Loading...')),
+                replacement: Center(
+                  child: CircularProgressIndicator(
+                    color: themeColor,
+                  ),
+                ),
               )),
             ],
           ),

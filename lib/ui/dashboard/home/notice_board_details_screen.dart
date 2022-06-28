@@ -1,5 +1,7 @@
+import 'package:bright_kid/helpers/services/api_request.dart';
 import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
+import 'package:bright_kid/ui/dashboard/home/notice_board_view.dart';
 import 'package:bright_kid/utils/colors.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/images.dart';
@@ -11,12 +13,25 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:intl/intl.dart';
+import 'dart:developer';
 
 class NoticeBoardDetails extends StatelessWidget {
   NoticeBoardDetails({
     Key key,
   }) : super(key: key);
-  final noticeId = Get.arguments;
+  final details = Get.arguments;
+
+  void handleAcknowledgment() async {
+    print('hiii');
+    var data = loginData?.loginUser;
+    var res = await ApiRequest()
+        .acknowledgeNotice(data?.schoolCode, data?.email, details['id']);
+
+    if (res != null) {
+      Get.off(() => NoticeBoardView());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +114,18 @@ class NoticeBoardDetails extends StatelessWidget {
                           padding: EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text('notice'), Text('25/06 12:34 PM')],
+                            children: [
+                              Text('notice'),
+                              Text(DateFormat('dd/MM/yy hh:mm a')
+                                  .format(details['dateTime']))
+                            ],
                           ),
                         ),
                         Container(
                           child: Column(
                             children: [
                               Text(
-                                'Notice title',
+                                details['title'],
                                 style: MyTextStyle.mulishBlack().copyWith(
                                   fontWeight: FontWeight.bold,
                                   fontSize: Get.width * .04,
@@ -120,7 +139,7 @@ class NoticeBoardDetails extends StatelessWidget {
                               ),
                               Container(
                                 child: Image.network(
-                                  'https://static.wikia.nocookie.net/dccu/images/2/2e/Batman_-_Justice_League_-_promo.jpg/revision/latest?cb=20191214215631',
+                                  details['imageUrl'],
                                   height: 200,
                                   width: 200,
                                   fit: BoxFit.cover,
@@ -132,7 +151,7 @@ class NoticeBoardDetails extends StatelessWidget {
                               Container(
                                 width: 300,
                                 child: Text(
-                                  'If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option',
+                                  details['body'],
                                   softWrap: true,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -143,14 +162,16 @@ class NoticeBoardDetails extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text('Acknowledged'),
-                            style: style,
-                          ),
-                        ),
+                        !details['acknowledgment']
+                            ? Container(
+                                margin: EdgeInsets.all(20),
+                                child: ElevatedButton(
+                                  onPressed: handleAcknowledgment,
+                                  child: Text('Acknowledged'),
+                                  style: style,
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),

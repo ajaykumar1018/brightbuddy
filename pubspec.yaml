@@ -1,7 +1,7 @@
 name: bright_kid
 description: A new Flutter application.
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 2.1.0+3
 
@@ -17,7 +17,7 @@ dependencies:
   change_app_package_name: ^1.1.0
   cupertino_icons: ^1.0.2
   provider: ^5.0.0
-#  google_fonts: ^2.1.1
+  #  google_fonts: ^2.1.1
   shared_preferences: ^2.0.6
   step_progress_indicator:
   animated_bottom_navigation_bar: ^0.3.2
@@ -38,6 +38,7 @@ dependencies:
   pie_chart: ^5.3.0
   device_apps: ^2.2.0
   launch_review: ^3.0.1
+  badges: ^2.0.3
 
 flutter_icons:
   image_path: "assets/images/logo2.png"
@@ -53,7 +54,6 @@ dependency_overrides:
   get: 4.1.4
 
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -70,6 +70,3 @@ flutter:
     - family: babib
       fonts:
         - asset: assets/fonts/babib.TTF
-
-
-

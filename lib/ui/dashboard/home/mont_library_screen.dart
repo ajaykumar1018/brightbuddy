@@ -2,6 +2,7 @@ import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
 import 'package:bright_kid/helpers/services/api_request.dart';
 import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
+import 'package:bright_kid/models/mont_lib_model.dart';
 import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/ui/dashboard/home/mont_library_item.dart';
 import 'package:bright_kid/ui/dashboard/home/notice_board_item.dart';
@@ -26,7 +27,7 @@ class MontLibraryScreen extends StatefulWidget {
 }
 
 class _MontLibraryScreenState extends State<MontLibraryScreen> {
-  List<Post> posts;
+  List<MontLib> montLib;
   var isLoaded = false;
   @override
   void initState() {
@@ -45,8 +46,10 @@ class _MontLibraryScreenState extends State<MontLibraryScreen> {
   }
 
   getData() async {
-    posts = await ApiRequest().getPost();
-    if (posts != null) {
+    var data = loginData?.loginUser;
+    montLib = await ApiRequest()
+        .getMontLib(data?.email, data?.level, data?.schoolCode);
+    if (montLib != null) {
       setState(() {
         isLoaded = true;
       });
@@ -119,12 +122,13 @@ class _MontLibraryScreenState extends State<MontLibraryScreen> {
                   child: Visibility(
                 visible: isLoaded,
                 child: ListView.builder(
-                  itemCount: posts?.length,
+                  itemCount: montLib?.length,
                   itemBuilder: (context, index) {
                     return MontLibraryItem(
-                      title: posts[index].title,
-                      body: posts[index].body,
-                      id: posts[index].id,
+                      title: montLib[index].kitName,
+                      issueDate: montLib[index].issueDate,
+                      dueDate: montLib[index].dueDate,
+                      returnDate: montLib[index].returnDate,
                     );
                   },
                 ),
