@@ -3,7 +3,7 @@ import 'package:bright_kid/helpers/services/api_request.dart';
 import 'package:bright_kid/helpers/widgets/global_widgets.dart';
 import 'package:bright_kid/helpers/widgets/logout_bottomsheet.dart';
 import 'package:bright_kid/models/notice_model.dart';
-import 'package:bright_kid/models/post_model.dart';
+// import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/ui/dashboard/home/notice_board_item.dart';
 import 'package:bright_kid/utils/colors.dart';
 import 'package:bright_kid/utils/common.dart';
@@ -26,7 +26,6 @@ class NoticeBoardView extends StatefulWidget {
 }
 
 class _NoticeBoardViewState extends State<NoticeBoardView> {
-  List<Post> posts;
   List<Notice> notices;
   var isLoaded = false;
   @override
@@ -41,20 +40,8 @@ class _NoticeBoardViewState extends State<NoticeBoardView> {
       getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
     );
 
-    getData();
     getNotices();
     super.initState();
-  }
-
-  getData() async {
-    posts = await ApiRequest().getPost();
-    if (posts != null) {
-      setState(() {
-        isLoaded = true;
-      });
-    } else {
-      posts = [];
-    }
   }
 
   getNotices() async {

@@ -6,7 +6,7 @@ import 'package:bright_kid/helpers/services/api_url.dart';
 import 'package:bright_kid/helpers/services/show_messages.dart';
 import 'package:bright_kid/models/mont_lib_model.dart';
 import 'package:bright_kid/models/notice_model.dart';
-import 'package:bright_kid/models/post_model.dart';
+// import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,18 +15,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class ApiRequest {
-  Future getPost() async {
-    var client = http.Client();
-
-    var uri = Uri.parse('https://jsonplaceholder.typicode.com/posts');
-
-    var response = await client.get(uri);
-    if (response.statusCode == 200) {
-      var json = response.body;
-      return postFromJson(json);
-    }
-  }
-
   Future getNotices(
       String schoolCode, String email, String role, String level) async {
     try {

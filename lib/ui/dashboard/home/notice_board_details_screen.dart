@@ -23,7 +23,6 @@ class NoticeBoardDetails extends StatelessWidget {
   final details = Get.arguments;
 
   void handleAcknowledgment() async {
-    print('hiii');
     var data = loginData?.loginUser;
     var res = await ApiRequest()
         .acknowledgeNotice(data?.schoolCode, data?.email, details['id']);

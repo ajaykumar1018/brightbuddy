@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bright_kid/MesiboPlugin.dart';
+import 'package:flutter/material.dart';
 
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
 import 'package:bright_kid/helpers/services/api_request.dart';
@@ -37,6 +39,18 @@ import 'package:badges/badges.dart';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:launch_review/launch_review.dart';
+// import 'MesiboPlugin.dart';
+import 'package:flutter/services.dart';
+
+class DemoUser {
+  String token;
+  String address;
+
+  DemoUser(String t, String a) {
+    token = t;
+    address = a;
+  }
+}
 
 class HomeView extends StatefulWidget {
   @override
@@ -51,6 +65,17 @@ class _HomeViewState extends State<HomeView> {
 
   int overAllAvg = 0;
   double activitiesAvg = 0.0;
+  static MesiboPluginApi _mesibo = MesiboPluginApi();
+  static const callbacks = const MethodChannel("mesibo.com/callbacks");
+  String _mesiboStatus = 'Mesibo status: Not Connected.';
+  Text mStatusText;
+
+  DemoUser user1 = DemoUser(
+      "1f43a81454a2cdbfa90e8c3fe27f9c6b9921148568f8c7e1140e73bxa561c67b139",
+      'ajay2@oureye.ai');
+
+  String remoteUser;
+  bool mOnline = false, mLoginDone = false;
 
   Future<void> calculateTotalAverage() async {
     await Provider.of<DashboardProvider>(context, listen: false)
@@ -93,8 +118,32 @@ class _HomeViewState extends State<HomeView> {
     getEnrollmentFunc4();
     getEnrollmentFunc5();
     getNotices();
+    // _loginUser1();
 
     super.initState();
+    callbacks.setMethodCallHandler(callbackHandler);
+  }
+
+  void Mesibo_onConnectionStatus(int status) {
+    print('Mesibo_onConnectionStatus: ' + status.toString());
+    _mesiboStatus = 'Mesibo status: ' + status.toString();
+    setState(() {});
+
+    if (1 == status) mOnline = true;
+  }
+
+  Future<dynamic> callbackHandler(MethodCall methodCall) async {
+    print('Native call!');
+    var args = methodCall.arguments;
+    switch (methodCall.method) {
+      case "Mesibo_onConnectionStatus":
+        Mesibo_onConnectionStatus(args['status'] as int);
+        return "";
+        break;
+      default:
+        return "";
+        break;
+    }
   }
 
   getNotices() async {
@@ -430,7 +479,7 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => WeeklyCalendarView());
+                                _showMessages();
                               },
                               child: Column(children: [
                                 Text(
@@ -501,7 +550,10 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => WeeklyCalendarView());
+                                // Get.to(
+                                //   () => WeeklyCalendarView(),
+                                // );
+                                _loginUser1();
                               },
                               child: Column(children: [
                                 Text(
@@ -1207,5 +1259,45 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void showAlert(String title, String body) {
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(body),
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  bool isOnline() {
+    if (mOnline) return true;
+    showAlert("Not Online", "First login with a valid token");
+    return false;
+  }
+
+  void _loginUser1() {
+    if (mLoginDone) {
+      showAlert("Failed",
+          "You have already initiated login. If the connection status is not 1, check the token and the package name/bundle ID");
+      return;
+    }
+    mLoginDone = true;
+    _mesibo.setup(user1.token);
+    remoteUser = 'ajay3@oureye.ai';
+  }
+
+  void _showMessages() {
+    if (!isOnline()) return;
+    _mesibo.showMessages(remoteUser);
   }
 }
