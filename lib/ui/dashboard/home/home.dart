@@ -150,16 +150,20 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  getMesiboDetails() async {
+  bool isLoading2 = false;
+  Future getMesiboDetails() async {
+    isLoading2 = true;
     Future.wait([
       getUserToken(),
       getAdminDetail(),
     ]).then((value) {
+      isLoading2 = false;
       print('value all: $value');
       DemoUser user = DemoUser(value[0], loginData?.loginUser?.email);
       _loginUser1(user, value[1]);
     }).catchError((err) {
       print(err);
+      isLoading2 = false;
     });
   }
 
@@ -397,7 +401,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(builder: (context, provider, _) {
       return ModalProgressHUD(
-        inAsyncCall: provider.isLoading || isLoading1,
+        inAsyncCall: provider.isLoading || isLoading1 || isLoading2,
         progressIndicator: MyLoader(),
         child: WillPopScope(
           onWillPop: onWillPop,
