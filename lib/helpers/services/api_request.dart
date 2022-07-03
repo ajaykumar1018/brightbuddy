@@ -4,8 +4,10 @@ import 'dart:typed_data';
 
 import 'package:bright_kid/helpers/services/api_url.dart';
 import 'package:bright_kid/helpers/services/show_messages.dart';
+import 'package:bright_kid/models/admin_detail.dart';
 import 'package:bright_kid/models/mont_lib_model.dart';
 import 'package:bright_kid/models/notice_model.dart';
+import 'package:bright_kid/models/user_token_for_mesibo.dart';
 // import 'package:bright_kid/models/post_model.dart';
 import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
@@ -33,6 +35,54 @@ class ApiRequest {
         print(response);
         var json = response.body;
         return noticeFromJson(json);
+      } else {
+        print(response.reasonPhrase);
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future getUserToken(String email) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      var client = http.Client();
+      String uri = Apis.userToken;
+      var url = Uri.parse(uri + '/$email');
+      print('tokenUrl: $url');
+      var response = await client.get(url);
+
+      if (response.statusCode == 200) {
+        var json = response.body;
+        return userTokenFromJson(json);
+      } else {
+        print(response.reasonPhrase);
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future getAdminDetail(String schoolCode) async {
+    try {
+      bool isConnected = await checkInternet();
+      if (!isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      var client = http.Client();
+      String uri = Apis.adminDetail;
+      var url = Uri.parse(uri + '?school_code=$schoolCode');
+      var response = await client.get(url);
+
+      if (response.statusCode == 200) {
+        print(response);
+        var json = response.body;
+        return adminDetailFromJson(json);
       } else {
         print(response.reasonPhrase);
       }

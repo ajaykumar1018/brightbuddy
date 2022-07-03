@@ -5,6 +5,8 @@ class Apis {
   static String notices = loginApiUrl + 'notices/all';
   static String noticeAck = loginApiUrl + 'notices/ack';
   static String mountlib = loginApiUrl + 'montlib/find';
+  static String userToken = loginApiUrl + 'users/mesibo_token';
+  static String adminDetail = loginApiUrl + 'users/school/admin';
   static String setPassword = loginApiUrl + 'auth/password/set';
   static String changePassword = loginApiUrl + 'auth/password/change';
   static String enrollments = loginApiUrl + 'auth/enrollment';

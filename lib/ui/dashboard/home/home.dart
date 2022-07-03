@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bright_kid/MesiboPlugin.dart';
+import 'package:bright_kid/models/admin_detail.dart';
+import 'package:bright_kid/models/user_token_for_mesibo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
@@ -61,6 +63,8 @@ class _HomeViewState extends State<HomeView> {
   TextEditingController searchController = TextEditingController();
   int noticeCount;
   List<Notice> notices;
+  UserToken tokenDetails;
+  List<AdminDetail> adminDetails;
   int secondContainerTotalPercentageActivities;
 
   int overAllAvg = 0;
@@ -71,10 +75,6 @@ class _HomeViewState extends State<HomeView> {
   String mesiboStatus = 'Mesibo status: Not Connected.';
 
   Text mStatusText;
-
-  DemoUser user1 = DemoUser(
-      "c1760fcf9c9a4aea9ca26158ee0fcd591519896f9f532677cee1140ddb0ha177c93b091",
-      'ajay4@oureye.ai'); //access token and user email
 
   String remoteUser;
   bool mOnline = false, mLoginDone = false;
@@ -120,7 +120,9 @@ class _HomeViewState extends State<HomeView> {
     getEnrollmentFunc4();
     getEnrollmentFunc5();
     getNotices();
-    // _loginUser1();
+
+    getMesiboDetails();
+    // getUserToken();
 
     super.initState();
     callbacks.setMethodCallHandler(callbackHandler);
@@ -146,6 +148,39 @@ class _HomeViewState extends State<HomeView> {
         return "";
         break;
     }
+  }
+
+  getMesiboDetails() async {
+    Future.wait([
+      getUserToken(),
+      getAdminDetail(),
+    ]).then((value) {
+      print('value all: $value');
+      DemoUser user = DemoUser(value[0], loginData?.loginUser?.email);
+      _loginUser1(user, value[1]);
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  Future<dynamic> getUserToken() async {
+    tokenDetails = await ApiRequest().getUserToken(
+      loginData?.loginUser?.email,
+    );
+    if (tokenDetails != null) {
+      return tokenDetails.mesiboUserToken;
+    }
+  }
+
+  Future<dynamic> getAdminDetail() async {
+    adminDetails = await ApiRequest().getAdminDetail(
+      loginData?.loginUser?.schoolCode,
+    );
+
+    if (adminDetails != null) {
+      return adminDetails[0].email;
+    }
+    // return adminDetails;
   }
 
   getNotices() async {
@@ -552,10 +587,9 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                // Get.to(
-                                //   () => WeeklyCalendarView(),
-                                // );
-                                _loginUser1();
+                                Get.to(
+                                  () => WeeklyCalendarView(),
+                                );
                               },
                               child: Column(children: [
                                 Text(
@@ -1287,18 +1321,25 @@ class _HomeViewState extends State<HomeView> {
     return false;
   }
 
-  void _loginUser1() {
+  void _loginUser1(user, email) {
     if (mLoginDone) {
       showAlert("Failed",
           "You have already initiated login. If the connection status is not 1, check the token and the package name/bundle ID");
       return;
     }
+    print("userDetails: ${user.token}");
+    print('email_id: $email');
     mLoginDone = true;
     print("\n Inside Login User1 \n");
-    print(user1.token);
-    _mesibo.setup(user1.token);
+    print(user.token);
+    print(
+        "==========================================================================================");
+    _mesibo.setup(user.token);
+
     print("\n Below Setup");
-    remoteUser = 'souravssp07@gmail.com'; //school admin email
+    print(
+        "==========================================================================================");
+    remoteUser = email; //school admin email
   }
 
   void _showMessages() {
