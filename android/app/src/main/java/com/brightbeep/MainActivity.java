@@ -1,4 +1,4 @@
-package com.mesibo.firstapp;
+package com.brightbeep;
 
 import android.os.Bundle;
 import android.util.Log;

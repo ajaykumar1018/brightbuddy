@@ -65,14 +65,16 @@ class _HomeViewState extends State<HomeView> {
 
   int overAllAvg = 0;
   double activitiesAvg = 0.0;
+
   static MesiboPluginApi _mesibo = MesiboPluginApi();
   static const callbacks = const MethodChannel("mesibo.com/callbacks");
-  String _mesiboStatus = 'Mesibo status: Not Connected.';
+  String mesiboStatus = 'Mesibo status: Not Connected.';
+
   Text mStatusText;
 
   DemoUser user1 = DemoUser(
-      "1f43a81454a2cdbfa90e8c3fe27f9c6b9921148568f8c7e1140e73bxa561c67b139",
-      'ajay2@oureye.ai');
+      "c1760fcf9c9a4aea9ca26158ee0fcd591519896f9f532677cee1140ddb0ha177c93b091",
+      'ajay4@oureye.ai'); //access token and user email
 
   String remoteUser;
   bool mOnline = false, mLoginDone = false;
@@ -126,7 +128,7 @@ class _HomeViewState extends State<HomeView> {
 
   void Mesibo_onConnectionStatus(int status) {
     print('Mesibo_onConnectionStatus: ' + status.toString());
-    _mesiboStatus = 'Mesibo status: ' + status.toString();
+    mesiboStatus = 'Mesibo status: ' + status.toString();
     setState(() {});
 
     if (1 == status) mOnline = true;
@@ -1292,8 +1294,11 @@ class _HomeViewState extends State<HomeView> {
       return;
     }
     mLoginDone = true;
+    print("\n Inside Login User1 \n");
+    print(user1.token);
     _mesibo.setup(user1.token);
-    remoteUser = 'ajay3@oureye.ai';
+    print("\n Below Setup");
+    remoteUser = 'souravssp07@gmail.com'; //school admin email
   }
 
   void _showMessages() {
