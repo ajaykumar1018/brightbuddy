@@ -112,7 +112,7 @@ class _LoginViewState extends State<LoginView> {
                                   ),
                                   controller: _emailController,
                                   type: TextInputType.emailAddress,
-                                  validator: FieldValidator.validateEmail,
+                                  // validator: FieldValidator.validateEmail,
                                   action: TextInputAction.next,
                                 ),
                                 SizedBox(height: Get.width * .05),

@@ -152,7 +152,8 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: (loginData?.loginUser?.profilePic == '')
+                            image: (loginData?.loginUser?.profilePic == '' ||
+                                    loginData?.loginUser?.profilePic == null)
                                 ? AssetImage(dp)
                                 : NetworkImage(
                                     loginData.loginUser.profilePic,
@@ -453,9 +454,9 @@ class _SeeCourseScreenState extends State<SeeCourseScreen> {
         width: Get.width,
         decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(model
-                  .images[model.images.length >= 6 ? index % 6 : index].image),
-            )
+          image: AssetImage(
+              model.images[model.images.length >= 6 ? index % 6 : index].image),
+        )
             // boxShadow: [
             //   BoxShadow(
             //     color: Color(0xff000000).withOpacity(.16),

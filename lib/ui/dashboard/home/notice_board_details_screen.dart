@@ -82,7 +82,8 @@ class NoticeBoardDetails extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: (loginData?.loginUser?.profilePic == '')
+                          image: (loginData?.loginUser?.profilePic == '' ||
+                                  loginData?.loginUser?.profilePic == null)
                               ? AssetImage(dp)
                               : NetworkImage(
                                   loginData.loginUser.profilePic,

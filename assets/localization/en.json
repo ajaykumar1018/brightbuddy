@@ -1,9 +1,9 @@
 {
   "happy_learning_exclamation": "Happy \nLearning!",
   "welcome_exclamation": "Welcome!",
-  "email": "Email",
-  "email_address": "email address",
-  "please_enter_email": "Please enter email",
+  "email": "Email / Contact",
+  "email_address": "email address / contact",
+  "please_enter_email": "Please enter email / contact",
   "field_required": "Field required",
   "password": "Password",
   "password_hint": "password",

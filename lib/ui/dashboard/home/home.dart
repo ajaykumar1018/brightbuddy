@@ -281,9 +281,13 @@ class _HomeViewState extends State<HomeView> {
         });
       }
     });
-
+    double percentage;
     setState(() {
-      double percentage = (sum / total);
+      if (total == 0 || total == null) {
+        percentage = 0;
+      } else {
+        percentage = (sum / total);
+      }
       double percentage2 = percentage * 100;
       intPercentage = percentage2.round();
     });
@@ -458,12 +462,14 @@ class _HomeViewState extends State<HomeView> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image:
-                                      (loginData?.loginUser?.profilePic == '')
-                                          ? AssetImage(dp)
-                                          : NetworkImage(
-                                              loginData.loginUser.profilePic,
-                                            ),
+                                  image: (loginData?.loginUser?.profilePic ==
+                                              '' ||
+                                          loginData?.loginUser?.profilePic ==
+                                              null)
+                                      ? AssetImage(dp)
+                                      : NetworkImage(
+                                          loginData.loginUser.profilePic,
+                                        ),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -473,21 +479,21 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     SizedBox(height: Get.height * .04),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        // Spacer(),
-                        Column(
-                          children: <Widget>[
-                            Image.asset(
-                              bookCheckIcon,
-                            ),
-                            SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => MontLibraryScreen());
-                              },
-                              child: Column(children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => MontLibraryScreen());
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // Spacer(),
+                          Column(
+                            children: <Widget>[
+                              Image.asset(
+                                bookCheckIcon,
+                              ),
+                              SizedBox(width: 5),
+                              Column(children: [
                                 Text(
                                   'Mont.',
                                   style: MyTextStyle.mulishBlack().copyWith(
@@ -509,118 +515,119 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                 )
                               ]),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Image.asset(
-                              messageIcon,
-                            ),
-                            SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                _showMessages();
-                              },
-                              child: Column(children: [
-                                Text(
-                                  'Messages',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
-
-                                    //decoration: TextDecoration.underline,
-                                  ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _showMessages();
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset(
+                                  messageIcon,
                                 ),
-                              ]),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            noticeCount != null && noticeCount > 0
-                                ? Badge(
-                                    badgeContent: Text(
-                                      noticeCount.toString(),
-                                      style: TextStyle(color: Colors.white),
+                                SizedBox(width: 5),
+                                Column(children: [
+                                  Text(
+                                    'Messages',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
+
+                                      //decoration: TextDecoration.underline,
                                     ),
-                                    badgeColor: Color.fromRGBO(190, 2, 2, 1),
-                                    child: Image.asset(
-                                      noticeBoardIcon,
+                                  ),
+                                ]),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(() => NoticeBoardView());
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                noticeCount != null && noticeCount > 0
+                                    ? Badge(
+                                        badgeContent: Text(
+                                          noticeCount.toString(),
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        badgeColor:
+                                            Color.fromRGBO(190, 2, 2, 1),
+                                        child: Image.asset(
+                                          noticeBoardIcon,
+                                        ),
+                                      )
+                                    : Image.asset(
+                                        noticeBoardIcon,
+                                      ),
+                                SizedBox(width: 5),
+                                Column(children: [
+                                  Text(
+                                    'Notice',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
+
+                                      //decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Board',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
+
+                                      //decoration: TextDecoration.underline,
                                     ),
                                   )
-                                : Image.asset(
-                                    noticeBoardIcon,
-                                  ),
-                            SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => NoticeBoardView());
-                              },
-                              child: Column(children: [
-                                Text(
-                                  'Notice',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
-
-                                    //decoration: TextDecoration.underline,
-                                  ),
+                                ]),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => WeeklyCalendarView(),
+                              );
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset(
+                                  calendarMonthIcon,
                                 ),
-                                Text(
-                                  'Board',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
+                                SizedBox(width: 5),
+                                Column(children: [
+                                  Text(
+                                    'Weekly',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
 
-                                    //decoration: TextDecoration.underline,
+                                      //decoration: TextDecoration.underline,
+                                    ),
                                   ),
-                                )
-                              ]),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Image.asset(
-                              calendarMonthIcon,
-                            ),
-                            SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(
-                                  () => WeeklyCalendarView(),
-                                );
-                              },
-                              child: Column(children: [
-                                Text(
-                                  'Weekly',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
+                                  Text(
+                                    'Tracking',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
 
-                                    //decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                                Text(
-                                  'Tracking',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
-
-                                    //decoration: TextDecoration.underline,
-                                  ),
-                                )
-                              ]),
+                                      //decoration: TextDecoration.underline,
+                                    ),
+                                  )
+                                ]),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 10),
                     Expanded(
@@ -1327,8 +1334,9 @@ class _HomeViewState extends State<HomeView> {
 
   void _loginUser1(user, email) {
     if (mLoginDone) {
-      showAlert("Failed",
-          "You have already initiated login. If the connection status is not 1, check the token and the package name/bundle ID");
+      // showAlert("Failed",
+      //     "You have already initiated login. If the connection status is not 1, check the token and the package name/bundle ID");
+      _mesibo.showMessages(remoteUser);
       return;
     }
     print("userDetails: ${user.token}");
@@ -1343,11 +1351,17 @@ class _HomeViewState extends State<HomeView> {
     print("\n Below Setup");
     print(
         "==========================================================================================");
-    remoteUser = email; //school admin email
+    remoteUser = email;
+    //school admin email
+    _mesibo.showMessages(remoteUser);
   }
 
   void _showMessages() {
-    if (!isOnline()) return;
-    _mesibo.showMessages(remoteUser);
+    print("remoteUser============" + remoteUser);
+    if (!isOnline()) {
+      getMesiboDetails();
+    } else {
+      _mesibo.showMessages(remoteUser);
+    }
   }
 }
