@@ -813,6 +813,78 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
+          enrolled_course_name.replaceAll(RegExp(r"\s+"), "") == 'Level'
+              ? Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(23)),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.black54,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: Get.height * .15,
+                            left: 0,
+                            right: 0,
+                            child: Icon(
+                              Icons.lock,
+                              color: Colors.white,
+                              size: 100.0,
+                            ),
+                          ),
+                          Positioned(
+                            top: Get.height * .27,
+                            left: 0,
+                            right: 0,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Locked',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Not registered for progress',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Please ask center for registeration',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
     );
@@ -982,6 +1054,78 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
+          enrolled_course_name.replaceAll(RegExp(r"\s+"), "") == 'Level'
+              ? Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(23)),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.black54,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: Get.height * .15,
+                            left: 0,
+                            right: 0,
+                            child: Icon(
+                              Icons.lock,
+                              color: Colors.white,
+                              size: 100.0,
+                            ),
+                          ),
+                          Positioned(
+                            top: Get.height * .27,
+                            left: 0,
+                            right: 0,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Locked',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Not registered for progress',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Please ask center for registeration',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
     );
@@ -1127,6 +1271,78 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
+          enrolled_course_name.replaceAll(RegExp(r"\s+"), "") == 'Level'
+              ? Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(23)),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.black54,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: Get.height * .15,
+                            left: 0,
+                            right: 0,
+                            child: Icon(
+                              Icons.lock,
+                              color: Colors.white,
+                              size: 100.0,
+                            ),
+                          ),
+                          Positioned(
+                            top: Get.height * .27,
+                            left: 0,
+                            right: 0,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Locked',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Not registered for progress',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Please ask center for registeration',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SFPro',
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
     );
@@ -1328,7 +1544,7 @@ class _HomeViewState extends State<HomeView> {
 
   bool isOnline() {
     if (mOnline) return true;
-    showAlert("Not Online", "First login with a valid token");
+    // showAlert("Not Online", "First login with a valid token");
     return false;
   }
 
@@ -1353,7 +1569,6 @@ class _HomeViewState extends State<HomeView> {
         "==========================================================================================");
     remoteUser = email;
     //school admin email
-    _mesibo.showMessages(remoteUser);
   }
 
   void _showMessages() {
