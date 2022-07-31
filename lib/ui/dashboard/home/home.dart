@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:bright_kid/MesiboPlugin.dart';
 import 'package:bright_kid/models/admin_detail.dart';
 import 'package:bright_kid/models/user_token_for_mesibo.dart';
+import 'package:bright_kid/services/local_notification.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
@@ -30,6 +32,7 @@ import 'package:bright_kid/utils/common.dart';
 import 'package:bright_kid/utils/global_function.dart';
 import 'package:bright_kid/utils/images.dart';
 import 'package:bright_kid/utils/loader_class.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:bright_kid/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +44,11 @@ import 'package:badges/badges.dart';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:bright_kid/token_monitor.dart';
 // import 'MesiboPlugin.dart';
 import 'package:flutter/services.dart';
+
+import 'package:bright_kid/services/local_notification.dart';
 
 class DemoUser {
   String token;
@@ -78,6 +84,7 @@ class _HomeViewState extends State<HomeView> {
   String remoteUser;
   bool mOnline = false, mLoginDone = false;
 
+  String _token;
   Future<void> calculateTotalAverage() async {
     await Provider.of<DashboardProvider>(context, listen: false)
         .getEnrollmentFunc()
@@ -113,6 +120,14 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  void setToken(String token) {
+    print('======================FCM Token===================: $token');
+    setState(() {
+      _token = token;
+    });
+  }
+
+  Stream<String> _tokenStream;
   @override
   void initState() {
     calculateTotalAverage();
@@ -125,6 +140,59 @@ class _HomeViewState extends State<HomeView> {
 
     super.initState();
     callbacks.setMethodCallHandler(callbackHandler);
+
+    FirebaseMessaging.instance
+        .getToken(
+            vapidKey:
+                'BHVAy2ic9La0QZyPzpQEh7PgYoeMMH0s4Cj1lqpIpMgvhJiO2IsczkIlKnePalOulPEeRdH17Mve_r_Oq4Bpv0A')
+        .then(setToken);
+    _tokenStream = FirebaseMessaging.instance.onTokenRefresh;
+    _tokenStream.listen(setToken);
+
+    // 1. This method call when app in terminated state and you get a notification
+    // when you click on notification app open from terminated state and you can get notification data in this method
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+          // if (message.data['_id'] != null) {
+          //   Navigator.of(context).push(
+          //     MaterialPageRoute(
+          //       builder: (context) => DemoScreen(
+          //         id: message.data['_id'],
+          //       ),
+          //     ),
+          //   );
+          // }
+        }
+      },
+    );
+
+    // 2. This method only call when App in forground it mean app must be opened
+    FirebaseMessaging.onMessage.listen(
+      (message) {
+        print("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          print(message.notification.title);
+          print(message.notification.body);
+          print("message.data11 ${message.data}");
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification.title);
+          print(message.notification.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
   }
 
   void Mesibo_onConnectionStatus(int status) {
@@ -135,13 +203,19 @@ class _HomeViewState extends State<HomeView> {
     if (1 == status) mOnline = true;
   }
 
+  // void showNotifocation() {}
+
   Future<dynamic> callbackHandler(MethodCall methodCall) async {
     print('Native call!');
     var args = methodCall.arguments;
+    print('Above method call ===========${methodCall.method}');
     switch (methodCall.method) {
       case "Mesibo_onConnectionStatus":
         Mesibo_onConnectionStatus(args['status'] as int);
         return "";
+        break;
+      case 'Mesibo_onMessage':
+        // showNotificaion();
         break;
       default:
         return "";
@@ -1562,11 +1636,15 @@ class _HomeViewState extends State<HomeView> {
     print(
         "==========================================================================================");
     _mesibo.setup(user.token);
+    print(
+        '=========================Token=================== line 1642 $_token');
+    _mesibo.setPushToken(_token, false);
 
     print("\n Below Setup");
     print(
         "==========================================================================================");
     remoteUser = email;
+
     //school admin email
   }
 
