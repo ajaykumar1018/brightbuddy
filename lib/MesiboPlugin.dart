@@ -16,7 +16,8 @@ class MesiboPluginApi {
   /// Constructor for [MesiboPluginApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  MesiboPluginApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  MesiboPluginApi({BinaryMessenger? binaryMessenger})
+      : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
 
@@ -24,7 +25,8 @@ class MesiboPluginApi {
 
   Future<void> setup(String arg_token) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MesiboPluginApi.setup', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MesiboPluginApi.setup', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_token]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -33,7 +35,32 @@ class MesiboPluginApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setPushToken(String arg_token, bool arg_voip) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.MesiboPluginApi.setPushToken', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel
+        .send(<Object?>[arg_token, arg_voip]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -46,16 +73,18 @@ class MesiboPluginApi {
 
   Future<void> sendMessage(String arg_peer, String arg_message) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MesiboPluginApi.sendMessage', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_peer, arg_message]) as Map<Object?, Object?>?;
+        'dev.flutter.pigeon.MesiboPluginApi.sendMessage', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel
+        .send(<Object?>[arg_peer, arg_message]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -68,7 +97,8 @@ class MesiboPluginApi {
 
   Future<void> showUserList() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MesiboPluginApi.showUserList', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MesiboPluginApi.showUserList', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -77,7 +107,8 @@ class MesiboPluginApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -90,7 +121,8 @@ class MesiboPluginApi {
 
   Future<void> showMessages(String arg_peer) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MesiboPluginApi.showMessages', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MesiboPluginApi.showMessages', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_peer]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -99,7 +131,8 @@ class MesiboPluginApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -112,7 +145,8 @@ class MesiboPluginApi {
 
   Future<void> audioCall(String arg_peer) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MesiboPluginApi.audioCall', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MesiboPluginApi.audioCall', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_peer]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -121,7 +155,8 @@ class MesiboPluginApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -134,7 +169,8 @@ class MesiboPluginApi {
 
   Future<void> videoCall(String arg_peer) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MesiboPluginApi.videoCall', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MesiboPluginApi.videoCall', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_peer]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -143,7 +179,8 @@ class MesiboPluginApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,

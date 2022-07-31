@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "274229539802",
+    "project_id": "bright-beep",
+    "storage_bucket": "bright-beep.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274229539802:android:f97eef38219c9d5fdf86e3",
+        "android_client_info": {
+          "package_name": "com.brightbeep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274229539802-taa4bli15cekh73cd03jv3mchg801f3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvLmlCIPCHcXY-Lo2_YgXTD1dYtup7_cQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274229539802-taa4bli15cekh73cd03jv3mchg801f3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

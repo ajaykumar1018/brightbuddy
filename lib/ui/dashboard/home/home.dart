@@ -69,7 +69,6 @@ class _HomeViewState extends State<HomeView> {
 
   int overAllAvg = 0;
   double activitiesAvg = 0.0;
-
   static MesiboPluginApi _mesibo = MesiboPluginApi();
   static const callbacks = const MethodChannel("mesibo.com/callbacks");
   String mesiboStatus = 'Mesibo status: Not Connected.';
