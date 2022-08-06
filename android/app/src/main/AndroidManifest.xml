@@ -5,7 +5,7 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 	<application android:label="Bright Beep" android:usesCleartextTraffic="true" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
-		<activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:exported="true">
+		<activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:exported="true" android:showWhenLocked="true" android:turnScreenOn="true">
 			<!--
 			Specifies an Android theme to apply to this Activity as soon as
 			the Android process has started. This theme is visible to the user

@@ -1,32 +1,25 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  static void initialize() {
-    // initializationSettings  for Android
-    const InitializationSettings initializationSettings =
+  static void initialize() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+
+    final InitializationSettings initializationSettings =
         InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      android: initializationSettingsAndroid,
     );
-
-    _notificationsPlugin.initialize(
+    await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: (String id) async {
-        print("onSelectNotification");
-        if (id.isNotEmpty) {
-          print("Router Value1234 $id");
-
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => DemoScreen(
-          //       id: id,
-          //     ),
-          //   ),
-          // );
-
+      onSelectNotification: (String payload) async {
+        if (payload != null) {
+          debugPrint('notification payload: $payload');
         }
       },
     );
@@ -35,21 +28,24 @@ class LocalNotificationService {
   static void createanddisplaynotification(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      const NotificationDetails notificationDetails = NotificationDetails(
-        android: AndroidNotificationDetails(
-          "brightbeep",
-          "brightbeep push notification",
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+        'brightbeep',
+        'brightbeep',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        playSound: true,
       );
-
-      await _notificationsPlugin.show(
+      const NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(
         id,
         message.notification.title,
-        message.notification.body,
-        notificationDetails,
-        payload: message.data['_id'],
+        message.notification.title,
+        platformChannelSpecifics,
+        payload: message.data['route'],
       );
     } on Exception catch (e) {
       print(e);

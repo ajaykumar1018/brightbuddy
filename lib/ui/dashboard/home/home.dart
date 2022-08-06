@@ -901,50 +901,48 @@ class _HomeViewState extends State<HomeView> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: Get.height * .15,
-                            left: 0,
-                            right: 0,
-                            child: Icon(
-                              Icons.lock,
-                              color: Colors.white,
-                              size: 100.0,
-                            ),
-                          ),
-                          Positioned(
-                            top: Get.height * .27,
+                            top: Get.height * .01,
                             left: 0,
                             right: 0,
                             child: Column(
                               children: [
+                                Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                  size: 75.0,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
                                   'Locked',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
-                                  'Not registered for progress',
+                                  'Not registered for DIY @ Home',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
-                                  'Please ask center for registeration',
+                                  'Please ask center for registration',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
@@ -1142,50 +1140,48 @@ class _HomeViewState extends State<HomeView> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: Get.height * .15,
-                            left: 0,
-                            right: 0,
-                            child: Icon(
-                              Icons.lock,
-                              color: Colors.white,
-                              size: 100.0,
-                            ),
-                          ),
-                          Positioned(
-                            top: Get.height * .27,
+                            top: Get.height * .01,
                             left: 0,
                             right: 0,
                             child: Column(
                               children: [
+                                Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                  size: 75.0,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
                                   'Locked',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
-                                  'Not registered for progress',
+                                  'Not registered for DIY @ Home',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
-                                  'Please ask center for registeration',
+                                  'Please ask center for registration',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
@@ -1359,50 +1355,48 @@ class _HomeViewState extends State<HomeView> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: Get.height * .15,
-                            left: 0,
-                            right: 0,
-                            child: Icon(
-                              Icons.lock,
-                              color: Colors.white,
-                              size: 100.0,
-                            ),
-                          ),
-                          Positioned(
-                            top: Get.height * .27,
+                            top: Get.height * .01,
                             left: 0,
                             right: 0,
                             child: Column(
                               children: [
+                                Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                  size: 75.0,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
                                   'Locked',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
-                                  'Not registered for progress',
+                                  'Not registered for DIY @ Home',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
-                                  'Please ask center for registeration',
+                                  'Please ask center for registration',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SFPro',
                                   ),
