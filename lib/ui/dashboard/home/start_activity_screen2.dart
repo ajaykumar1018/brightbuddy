@@ -34,21 +34,19 @@ class _StartActivityScreen2State extends State<StartActivityScreen2> {
 
   @override
   void initState() {
-
-     init();
+    init();
     super.initState();
   }
 
-  init() async{
-   await Provider.of<DashboardProvider>(context, listen: false).getCraftActivities(
+  init() async {
+    await Provider.of<DashboardProvider>(context, listen: false)
+        .getCraftActivities(
       '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
       getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
     );
 
     activityCategoryList.clear();
-    setState(() {
-
-    });
+    setState(() {});
     print('before my list length ${activityCategoryList.length}');
     print('before api list length ${getActivitiesOverviewList2.length}');
 

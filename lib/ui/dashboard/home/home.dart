@@ -42,8 +42,11 @@ import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:badges/badges.dart';
 
-import 'package:device_apps/device_apps.dart';
-import 'package:launch_review/launch_review.dart';
+// import 'package:device_apps/device_apps.dart';
+// import 'package:appcheck/appcheck.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
+
+// import 'package:launch_review/launch_review.dart';
 import 'package:bright_kid/token_monitor.dart';
 // import 'MesiboPlugin.dart';
 import 'package:flutter/services.dart';
@@ -1531,12 +1534,56 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  // void appChecker() async {
+  //   bool isInstalled = await DeviceApps.isAppInstalled('com.zappar.Zappar');
+  //   if (isInstalled == true) {
+  //     DeviceApps.openApp('com.zappar.Zappar');
+  //   } else {
+  //     LaunchReview.launch(androidAppId: "com.zappar.Zappar");
+  //   }
+  // }
+
+  // void appChecker() async {
+
+  //   if (Platform.isAndroid) {
+  //     const package = "com.zappar.Zappar";
+  //     print("Checking app availability.....\n")
+  //     await AppCheck.checkAvailability(package).then(
+  //       (app) => debugPrint(app.toString()),
+  //     );
+
+  //     await AppCheck.isAppEnabled(package).then(
+  //       (enabled) => enabled
+  //           ? debugPrint('$package enabled')
+  //           : debugPrint('$package disabled'),
+  //     );
+
+  //   // } else if (Platform.isIOS) {
+  //   //   // iOS doesn't allow to get installed apps.
+  //   //   installedApps = iOSApps;
+
+  //   //   await AppCheck.checkAvailability("calshow://").then(
+  //   //     (app) => debugPrint(app.toString()),
+  //   //   );
+  //   // }
+  // }
+
   void appChecker() async {
-    bool isInstalled = await DeviceApps.isAppInstalled('com.zappar.Zappar');
-    if (isInstalled == true) {
-      DeviceApps.openApp('com.zappar.Zappar');
-    } else {
-      LaunchReview.launch(androidAppId: "com.zappar.Zappar");
+    var androidPackageName = "com.zappar.Zappar";
+    if (Platform.isAndroid) {
+      // var isInstalled = await LaunchApp.isAppInstalled(
+      //     androidPackageName: androidPackageName);
+      // print("Is Installed: $isInstalled");
+      // if (isInstalled == false) {
+      //   await LaunchApp.openApp(
+      //     androidPackageName: androidPackageName,
+      //     openStore: true,
+      //   );
+      // }
+      await LaunchApp.openApp(
+        androidPackageName: androidPackageName,
+        openStore: true,
+      );
     }
   }
 
