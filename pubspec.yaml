@@ -70,6 +70,7 @@ flutter:
     - family: SFPro
       fonts:
         - asset: assets/fonts/SF-Pro-Display-Regular.otf
+        - weight: 300
     - family: MulishBlack
       fonts:
         - asset: assets/fonts/Mulish-Black.ttf

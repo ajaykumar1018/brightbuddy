@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bright_kid/ui/dashboard/home/home.dart';
 
 class DashboardProvider extends ChangeNotifier {
   DashboardProvider() {
@@ -203,7 +204,7 @@ class DashboardProvider extends ChangeNotifier {
     });
   }
 
-  Future submitActivity(
+  Future submitActivity (
     String email,
     int courseId,
     String categoryId,
@@ -220,8 +221,7 @@ class DashboardProvider extends ChangeNotifier {
       activityCode,
       time,
       activityName,
-    )
-        .then((response) {
+    ).then((response) {
       isLoading = false;
       notifyListeners();
       if (response != false) {
@@ -233,8 +233,11 @@ class DashboardProvider extends ChangeNotifier {
             ),
             enableDrag: false,
             isDismissible: false);
+        // Get montesary activity
+
       }
-    });
+    } );
+    await getEnrollmentFunc2();
   }
 
   Future submitActivity2(
@@ -267,8 +270,11 @@ class DashboardProvider extends ChangeNotifier {
             ),
             enableDrag: false,
             isDismissible: false);
+        // Get montesary activity
+
       }
     });
+    await getEnrollmentFunc2();
   }
 
   Future onchangePasswordButtonTapped(

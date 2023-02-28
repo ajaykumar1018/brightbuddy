@@ -6,7 +6,7 @@ import 'package:bright_kid/models/user_token_for_mesibo.dart';
 import 'package:bright_kid/services/local_notification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:bright_kid/helpers/provider/dashboard_provider.dart';
 import 'package:bright_kid/helpers/services/api_request.dart';
 import 'package:bright_kid/helpers/services/api_url.dart';
@@ -75,6 +75,8 @@ class _HomeViewState extends State<HomeView> {
   UserToken tokenDetails;
   List<AdminDetail> adminDetails;
   int secondContainerTotalPercentageActivities;
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
 
   int overAllAvg = 0;
   double activitiesAvg = 0.0;
@@ -133,7 +135,7 @@ class _HomeViewState extends State<HomeView> {
   Stream<String> _tokenStream;
   @override
   void initState() {
-    calculateTotalAverage();
+    //calculateTotalAverage();
     getEnrollmentFunc4();
     getEnrollmentFunc5();
     getNotices();
@@ -196,6 +198,25 @@ class _HomeViewState extends State<HomeView> {
         }
       },
     );
+  }
+
+  void _onRefresh() async{
+    // monitor network fetch
+    calculateTotalAverage();
+    getEnrollmentFunc4();
+    getEnrollmentFunc5();
+    getNotices();
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    calculateTotalAverage();
+    getEnrollmentFunc4();
+    getEnrollmentFunc5();
+    getNotices();
+    getMesiboDetails();
   }
 
   void Mesibo_onConnectionStatus(int status) {
@@ -287,6 +308,7 @@ class _HomeViewState extends State<HomeView> {
     if (timeNow <= 12) {
       return 'Good Morning';
     } else if ((timeNow > 12) && (timeNow <= 16)) {
+      print('loginData: ${loginData.loginSchool.schoolLogo}');
       return 'Good Afternoon';
     } else if ((timeNow > 16) && (timeNow < 20)) {
       return 'Good Evening';
@@ -477,6 +499,8 @@ class _HomeViewState extends State<HomeView> {
 
   bool isLoading1 = false;
 
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(builder: (context, provider, _) {
@@ -491,158 +515,157 @@ class _HomeViewState extends State<HomeView> {
             },
             child: Scaffold(
               backgroundColor: scaffold,
-              body: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: Get.width,
-                      margin: EdgeInsets.only(
-                        top: Get.height * .045,
-                        bottom: Get.height * .01,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 5),
-                                child: strokedText(
-                                    color: themeColor,
-                                    fontSize: Get.width * .045,
-                                    text: '${greeting()}!',
-                                    isProgressIndicator: false),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 5, top: 5),
-                                child: Text(
-                                  loginData?.loginUser?.name ?? '',
-                                  style: MyTextStyle.mulish().copyWith(
-                                      fontSize: Get.width * .035,
-                                      color: lightBlack,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.bottomSheet(LogoutBottomSheet());
-                            },
-                            child: Container(
-                              width: 43,
-                              height: 43,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: (loginData?.loginUser?.profilePic ==
-                                              '' ||
-                                          loginData?.loginUser?.profilePic ==
-                                              null)
-                                      ? AssetImage(dp)
-                                      : NetworkImage(
-                                          loginData.loginUser.profilePic,
-                                        ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: Get.height * .04),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => MontLibraryScreen());
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          // Spacer(),
-                          Column(
-                            children: <Widget>[
-                              Image.asset(
-                                bookCheckIcon,
-                              ),
-                              SizedBox(width: 5),
-                              Column(children: [
-                                Text(
-                                  'Mont.',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
+              body: SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: true,
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: Get.width,
+                        margin: EdgeInsets.only(
+                          top: Get.height * .045,
 
-                                    //decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                                Text(
-                                  'Library',
-                                  style: MyTextStyle.mulishBlack().copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Get.width * .045,
-                                    color: themeColor,
-
-                                    //decoration: TextDecoration.underline,
-                                  ),
-                                )
-                              ]),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              _showMessages();
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                Image.asset(
-                                  messageIcon,
-                                ),
-                                SizedBox(width: 5),
-                                Column(children: [
-                                  Text(
-                                    'Messages',
-                                    style: MyTextStyle.mulishBlack().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Get.width * .045,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 0),
+                                  child: strokedText(
                                       color: themeColor,
-
-                                      //decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ]),
+                                      fontSize: Get.width * .055,
+                                      text: '${greeting()}!',
+                                      isProgressIndicator: false),
+                                ),
                               ],
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(() => NoticeBoardView());
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                noticeCount != null && noticeCount > 0
-                                    ? Badge(
-                                        badgeContent: Text(
-                                          noticeCount.toString(),
-                                          style: TextStyle(color: Colors.white),
+                            GestureDetector(
+                                onTap: () {
+                                  Get.bottomSheet(LogoutBottomSheet());
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      width: 33,
+                                      height: 33,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: (loginData?.loginUser?.profilePic ==
+                                              '' ||
+                                              loginData?.loginUser?.profilePic ==
+                                                  null)
+                                              ? AssetImage(dp)
+                                              : NetworkImage(
+                                            loginData.loginUser.profilePic,
+                                          ),
+                                          fit: BoxFit.cover,
                                         ),
-                                        badgeColor:
-                                            Color.fromRGBO(190, 2, 2, 1),
-                                        child: Image.asset(
-                                          noticeBoardIcon,
-                                        ),
-                                      )
-                                    : Image.asset(
-                                        noticeBoardIcon,
                                       ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5, top: 5),
+                                      child: Text(
+                                        loginData?.loginUser?.name ?? '',
+                                        style: MyTextStyle.mulish().copyWith(
+                                            fontSize: Get.width * .035,
+                                            color: lightBlack,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                          width: Get.width,
+                          margin: EdgeInsets.only(
+                            bottom: Get.height * .01,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+
+                                      shape: BoxShape.rectangle,
+                                      image: DecorationImage(
+                                        image: (loginData?.loginSchool?.schoolLogo ==
+                                            '' ||
+                                            loginData?.loginSchool?.schoolLogo ==
+                                                null)
+                                            ? AssetImage(schoolLogo)
+                                            : NetworkImage(
+                                          loginData.loginSchool.schoolLogo,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(loginData?.loginSchool?.schoolName == "" || loginData?.loginSchool?.schoolName == null ? "BKMH" : loginData.loginSchool.schoolName.length > 20 ? '${loginData.loginSchool.schoolName.substring(0, 20)}...' : loginData.loginSchool.schoolName, style: MyTextStyle.mulishBlack().copyWith(
+
+                                        fontSize: Get.width * .040,
+
+                                        color: themeColor,
+
+                                        //decoration: TextDecoration.underline,
+                                      ),),
+                                      Text(loginData?.loginSchool?.city == "" || loginData?.loginSchool?.city == null ? "BKMH" : '${loginData.loginSchool.city} - ${loginData.loginSchool.pincode}' , style: MyTextStyle.mulishBlack().copyWith(
+                                        fontFamily: "SFPro",
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: Get.width * .030,
+                                        color: themeColor,
+
+                                        //decoration: TextDecoration.underline,
+                                      ),)
+                                    ],
+                                  )
+                                ],
+                              ),
+
+                              Image.asset(banner, width: Get.width * 0.4,)
+                            ],
+                          )
+                      ),
+                      SizedBox(height: Get.height * .04),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => MontLibraryScreen());
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // Spacer(),
+                            Column(
+                              children: <Widget>[
+                                Image.asset(
+                                  bookCheckIcon,
+                                ),
                                 SizedBox(width: 5),
                                 Column(children: [
                                   Text(
-                                    'Notice',
+                                    'Mont.',
                                     style: MyTextStyle.mulishBlack().copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontSize: Get.width * .045,
@@ -652,7 +675,7 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                   ),
                                   Text(
-                                    'Board',
+                                    'Library',
                                     style: MyTextStyle.mulishBlack().copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontSize: Get.width * .045,
@@ -664,70 +687,142 @@ class _HomeViewState extends State<HomeView> {
                                 ]),
                               ],
                             ),
-                          ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Get.to(
-                          //       () => WeeklyCalendarView(),
-                          //     );
-                          //   },
-                          //   child: Column(
-                          //     children: <Widget>[
-                          //       Image.asset(
-                          //         calendarMonthIcon,
-                          //       ),
-                          //       SizedBox(width: 5),
-                          //       Column(children: [
-                          //         Text(
-                          //           'Weekly',
-                          //           style: MyTextStyle.mulishBlack().copyWith(
-                          //             fontWeight: FontWeight.bold,
-                          //             fontSize: Get.width * .045,
-                          //             color: themeColor,
+                            GestureDetector(
+                              onTap: () {
+                                _showMessages();
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    messageIcon,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Column(children: [
+                                    Text(
+                                      'Messages',
+                                      style: MyTextStyle.mulishBlack().copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Get.width * .045,
+                                        color: themeColor,
 
-                          //             //decoration: TextDecoration.underline,
-                          //           ),
-                          //         ),
-                          //         Text(
-                          //           'Tracking',
-                          //           style: MyTextStyle.mulishBlack().copyWith(
-                          //             fontWeight: FontWeight.bold,
-                          //             fontSize: Get.width * .045,
-                          //             color: themeColor,
+                                        //decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ]),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => NoticeBoardView());
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  noticeCount != null && noticeCount > 0
+                                      ? Badge(
+                                    badgeContent: Text(
+                                      noticeCount.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    badgeColor:
+                                    Color.fromRGBO(190, 2, 2, 1),
+                                    child: Image.asset(
+                                      noticeBoardIcon,
+                                    ),
+                                  )
+                                      : Image.asset(
+                                    noticeBoardIcon,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Column(children: [
+                                    Text(
+                                      'Notice',
+                                      style: MyTextStyle.mulishBlack().copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Get.width * .045,
+                                        color: themeColor,
 
-                          //             //decoration: TextDecoration.underline,
-                          //           ),
-                          //         )
-                          //       ]),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            // subjectContainer(0, homeImage1),
-                            // SizedBox(height: 10),
-                            subjectContainer(1, 'assets/images/Montessori.png'),
-                            SizedBox(height: 10),
-                            subjectContainerNurseryCraftActivities(
-                                1, 'assets/images/ArtnCarfts.png'),
-                            SizedBox(height: 10),
-                            // subjectContainerNurseryBrightGiffy(
-                            //     0, 'assets/images/BrightGiffy.png'),
-                            // SizedBox(height: 10),
-                            subjectContainerScanner(
-                                0, 'assets/images/ARScanner.png'),
-                            SizedBox(height: 20),
+                                        //decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Board',
+                                      style: MyTextStyle.mulishBlack().copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Get.width * .045,
+                                        color: themeColor,
+
+                                        //decoration: TextDecoration.underline,
+                                      ),
+                                    )
+                                  ]),
+                                ],
+                              ),
+                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Get.to(
+                            //       () => WeeklyCalendarView(),
+                            //     );
+                            //   },
+                            //   child: Column(
+                            //     children: <Widget>[
+                            //       Image.asset(
+                            //         calendarMonthIcon,
+                            //       ),
+                            //       SizedBox(width: 5),
+                            //       Column(children: [
+                            //         Text(
+                            //           'Weekly',
+                            //           style: MyTextStyle.mulishBlack().copyWith(
+                            //             fontWeight: FontWeight.bold,
+                            //             fontSize: Get.width * .045,
+                            //             color: themeColor,
+
+                            //             //decoration: TextDecoration.underline,
+                            //           ),
+                            //         ),
+                            //         Text(
+                            //           'Tracking',
+                            //           style: MyTextStyle.mulishBlack().copyWith(
+                            //             fontWeight: FontWeight.bold,
+                            //             fontSize: Get.width * .045,
+                            //             color: themeColor,
+
+                            //             //decoration: TextDecoration.underline,
+                            //           ),
+                            //         )
+                            //       ]),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              // subjectContainer(0, homeImage1),
+                              // SizedBox(height: 10),
+                              subjectContainer(1, 'assets/images/Montessori.png'),
+                              SizedBox(height: 10),
+                              subjectContainerNurseryCraftActivities(
+                                  1, 'assets/images/ArtnCarfts.png'),
+                              SizedBox(height: 10),
+                              // subjectContainerNurseryBrightGiffy(
+                              //     0, 'assets/images/BrightGiffy.png'),
+                              // SizedBox(height: 10),
+                              subjectContainerScanner(
+                                  0, 'assets/images/ARScanner.png'),
+                              SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

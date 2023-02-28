@@ -31,14 +31,14 @@ Widget gradientButton({double width, double height, String text}) {
 }
 
 Widget strokedText(
-    {String text, double fontSize, Color color, bool isProgressIndicator}) {
+    {String text, double fontSize, Color color, bool isProgressIndicator, String fontStyle}) {
   return Text(
     text,
     style: isProgressIndicator
         ? MyTextStyle.sFPro().copyWith(
-            fontSize: fontSize, fontWeight: FontWeight.bold, color: color)
+            fontSize: fontSize, fontWeight: FontWeight.w100, color: color, fontStyle: FontStyle.italic)
         : MyTextStyle.mulishBlack().copyWith(
-            fontSize: fontSize, fontWeight: FontWeight.bold, color: color),
+            fontSize: fontSize, fontWeight: FontWeight.w100, color: color, fontStyle: FontStyle.italic),
   );
 }
 

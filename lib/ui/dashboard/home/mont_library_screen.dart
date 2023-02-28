@@ -31,15 +31,15 @@ class _MontLibraryScreenState extends State<MontLibraryScreen> {
   var isLoaded = false;
   @override
   void initState() {
-    Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc(
-      '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
-      getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
-    );
-
-    Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc2(
-      '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
-      getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
-    );
+    // Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc(
+    //   '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+    //   getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+    // );
+    //
+    // Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc2(
+    //   '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+    //   getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+    // );
 
     getData();
     super.initState();

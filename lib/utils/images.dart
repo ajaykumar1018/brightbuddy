@@ -11,10 +11,11 @@ var password = "assets/images/password.png";
 //Home
 var home = "assets/images/home.png";
 var homeActive = "assets/images/homeActive.png";
-var banner = "assets/images/banner.png";
+var banner = "assets/images/bannerimage.png";
 var drawing = "assets/images/drawing.png";
 var english = "assets/images/english.png";
 var learning = "assets/images/learning.png";
+var schoolLogo = "assets/images/schoollogo.png";
 var mathematics = "assets/images/mathematics.png";
 var dp = "assets/images/dp.png";
 var reading = "assets/images/reading.png";
