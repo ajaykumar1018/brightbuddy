@@ -665,43 +665,43 @@ class _HomeViewState extends State<HomeView> {
                               ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                () => WeeklyCalendarView(),
-                              );
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                Image.asset(
-                                  calendarMonthIcon,
-                                ),
-                                SizedBox(width: 5),
-                                Column(children: [
-                                  Text(
-                                    'Weekly',
-                                    style: MyTextStyle.mulishBlack().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Get.width * .045,
-                                      color: themeColor,
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Get.to(
+                          //       () => WeeklyCalendarView(),
+                          //     );
+                          //   },
+                          //   child: Column(
+                          //     children: <Widget>[
+                          //       Image.asset(
+                          //         calendarMonthIcon,
+                          //       ),
+                          //       SizedBox(width: 5),
+                          //       Column(children: [
+                          //         Text(
+                          //           'Weekly',
+                          //           style: MyTextStyle.mulishBlack().copyWith(
+                          //             fontWeight: FontWeight.bold,
+                          //             fontSize: Get.width * .045,
+                          //             color: themeColor,
 
-                                      //decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Tracking',
-                                    style: MyTextStyle.mulishBlack().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Get.width * .045,
-                                      color: themeColor,
+                          //             //decoration: TextDecoration.underline,
+                          //           ),
+                          //         ),
+                          //         Text(
+                          //           'Tracking',
+                          //           style: MyTextStyle.mulishBlack().copyWith(
+                          //             fontWeight: FontWeight.bold,
+                          //             fontSize: Get.width * .045,
+                          //             color: themeColor,
 
-                                      //decoration: TextDecoration.underline,
-                                    ),
-                                  )
-                                ]),
-                              ],
-                            ),
-                          ),
+                          //             //decoration: TextDecoration.underline,
+                          //           ),
+                          //         )
+                          //       ]),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -710,16 +710,16 @@ class _HomeViewState extends State<HomeView> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            subjectContainer(0, homeImage1),
-                            SizedBox(height: 10),
+                            // subjectContainer(0, homeImage1),
+                            // SizedBox(height: 10),
                             subjectContainer(1, 'assets/images/Montessori.png'),
                             SizedBox(height: 10),
                             subjectContainerNurseryCraftActivities(
                                 1, 'assets/images/ArtnCarfts.png'),
                             SizedBox(height: 10),
-                            subjectContainerNurseryBrightGiffy(
-                                0, 'assets/images/BrightGiffy.png'),
-                            SizedBox(height: 10),
+                            // subjectContainerNurseryBrightGiffy(
+                            //     0, 'assets/images/BrightGiffy.png'),
+                            // SizedBox(height: 10),
                             subjectContainerScanner(
                                 0, 'assets/images/ARScanner.png'),
                             SizedBox(height: 20),
@@ -794,7 +794,7 @@ class _HomeViewState extends State<HomeView> {
                   Text(
                     index == 0
                         ? '$enrolled_course_name :  Concepts\nRevision & Practice Tracker'
-                        : "$enrolled_course_name :  Montessori Activities\nRevision & Practice Tracker",
+                        : "Montessori Activities\nRevision & Practice Tracker",
                     // ? getEnrollmentModel
                     //         ?.getEnrollmenItems?.first?.courseName ??
                     //     ''
@@ -889,76 +889,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-          enrolled_course_name.replaceAll(RegExp(r"\s+"), "") == 'Level'
-              ? Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(23)),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.black54,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: Get.height * .01,
-                            left: 0,
-                            right: 0,
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.lock,
-                                  color: Colors.white,
-                                  size: 75.0,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Locked',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SFPro',
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Not registered for DIY @ Home',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SFPro',
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Please ask center for registration',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SFPro',
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : SizedBox(),
+          SizedBox(),
         ],
       ),
     );
@@ -1014,7 +945,7 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "$enrolled_course_name :  Craft Activities\nPractice Tracking",
+                    "Craft Activities\nPractice Tracking",
                     textAlign: TextAlign.center,
                     style: MyTextStyle.mulishBlack().copyWith(
                         fontWeight: FontWeight.bold,
@@ -1128,76 +1059,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-          enrolled_course_name.replaceAll(RegExp(r"\s+"), "") == 'Level'
-              ? Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(23)),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.black54,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: Get.height * .01,
-                            left: 0,
-                            right: 0,
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.lock,
-                                  color: Colors.white,
-                                  size: 75.0,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Locked',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SFPro',
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Not registered for DIY @ Home',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SFPro',
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Please ask center for registration',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'SFPro',
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : SizedBox(),
+          SizedBox(),
         ],
       ),
     );
@@ -1419,16 +1281,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget subjectContainerScanner(int index, String img) {
-    enrolled_course_name =
-        '${getEnrollmentModel?.getEnrollmenItems?.first?.courseName ?? ''}'
-            .split(":")[0];
-    double percentageBrightGiffy = double.parse(getEnrollmentModel
-            ?.getEnrollmenItems?.first?.giffyPercentageCompleted ??
-        '0.0');
-    print("percentageBrightGiffy: $percentageBrightGiffy");
-    double percentageBrightGiffy2 = percentageBrightGiffy * 100;
-    int inPercentageBrightGiffy = percentageBrightGiffy2.round();
-    print("BRIGHT GOFFY PERCENTAGE: $inPercentageBrightGiffy");
     return Container(
       margin: EdgeInsets.only(top: 10),
       width: Get.width,
@@ -1475,7 +1327,7 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "$enrolled_course_name :  Scan, Solve & Learn\nAnytime, Anywhere Teacher",
+                    "Scan, Solve & Learn\nAnytime, Anywhere Teacher",
                     textAlign: TextAlign.center,
                     style: MyTextStyle.mulishBlack().copyWith(
                         fontWeight: FontWeight.bold,

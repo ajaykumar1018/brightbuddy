@@ -307,8 +307,7 @@ class ApiRequest {
         headers: HeaderParameter.headers(),
       );
       var jsonResponse = json.decode(response.body);
-      print('response:\n');
-      print('this is body of getenrollment : ${response.body}');
+      print('This is body of getEnrollment in api_request : ${response.body}');
       if (response.statusCode == 200) {
         return jsonResponse;
       } else if (response.statusCode == 400) {

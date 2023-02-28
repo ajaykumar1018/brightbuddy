@@ -30,15 +30,15 @@ class _NoticeBoardViewState extends State<NoticeBoardView> {
   var isLoaded = false;
   @override
   void initState() {
-    Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc(
-      '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
-      getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
-    );
+    // Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc(
+    //   '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+    //   getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+    // );
 
-    Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc2(
-      '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
-      getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
-    );
+    // Provider.of<DashboardProvider>(context, listen: false).weeklyCalendarFunc2(
+    //   '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
+    //   getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
+    // );
 
     getNotices();
     super.initState();
