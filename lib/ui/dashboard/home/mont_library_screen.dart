@@ -27,7 +27,7 @@ class MontLibraryScreen extends StatefulWidget {
 }
 
 class _MontLibraryScreenState extends State<MontLibraryScreen> {
-  List<MontLib> montLib;
+  List<MontLib> montLib = [];
   var isLoaded = false;
   @override
   void initState() {
@@ -120,21 +120,30 @@ class _MontLibraryScreenState extends State<MontLibraryScreen> {
               ),
               SizedBox(height: 20),
               Expanded(
-                  child: Visibility(
+                  child: montLib?.length > 0 ? Visibility(
                 visible: isLoaded,
                 child: ListView.builder(
                   itemCount: montLib?.length,
                   itemBuilder: (context, index) {
-                    return MontLibraryItem(
-                      title: montLib[index].kitName,
-                      issueDate: montLib[index].issueDate,
-                      dueDate: montLib[index].dueDate,
-                      returnDate: montLib[index].returnDate,
-                    );
+                      return MontLibraryItem(
+                        title: montLib[index].kitName,
+                        issueDate: montLib[index].issueDate,
+                        dueDate: montLib[index].dueDate,
+                        returnDate: montLib[index].returnDate,
+                      );
+
                   },
                 ),
-                replacement: Center(child: Text('Loading...')),
-              )),
+                replacement: Center(child: CircularProgressIndicator()),
+              ) : Visibility(
+                    visible: isLoaded,
+                      replacement: Center(child: CircularProgressIndicator()),
+                      child: Center(child: Text("No Kits Issued", textAlign: TextAlign.center, style: TextStyle(
+                          fontWeight: FontWeight.bold,
+
+                          color: themeColor,
+                          fontSize: Get.width * .035), ))),
+                  ),
             ],
           ),
         ),

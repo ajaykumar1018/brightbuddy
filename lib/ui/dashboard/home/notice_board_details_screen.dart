@@ -22,6 +22,7 @@ class NoticeBoardDetails extends StatelessWidget {
   }) : super(key: key);
   final details = Get.arguments;
 
+
   void handleAcknowledgment() async {
     var data = loginData?.loginUser;
     var res = await ApiRequest()
@@ -31,6 +32,8 @@ class NoticeBoardDetails extends StatelessWidget {
       Get.off(() => NoticeBoardView());
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
