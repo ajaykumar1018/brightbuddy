@@ -35,6 +35,7 @@ public class MesiboPlugin {
     void showMessages(@NonNull String peer);
     void audioCall(@NonNull String peer);
     void videoCall(@NonNull String peer);
+    @NonNull Long mesiboUnreadMsgCount(@NonNull String peer);
 
     /** The codec used by MesiboPluginApi. */
     static MessageCodec<Object> getCodec() {
@@ -204,6 +205,30 @@ public class MesiboPlugin {
               }
               api.videoCall(peerArg);
               wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MesiboPluginApi.mesiboUnreadMsgCount", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              String peerArg = (String)args.get(0);
+              if (peerArg == null) {
+                throw new NullPointerException("peerArg unexpectedly null.");
+              }
+              Long output = api.mesiboUnreadMsgCount(peerArg);
+              wrapped.put("result", output);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

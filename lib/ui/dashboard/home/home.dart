@@ -76,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
   List<AdminDetail> adminDetails;
   int secondContainerTotalPercentageActivities;
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   int overAllAvg = 0;
   double activitiesAvg = 0.0;
@@ -200,7 +200,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void _onRefresh() async{
+  void _onRefresh() async {
     // monitor network fetch
     calculateTotalAverage();
     getEnrollmentFunc4();
@@ -209,7 +209,6 @@ class _HomeViewState extends State<HomeView> {
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
-
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
     calculateTotalAverage();
@@ -239,6 +238,9 @@ class _HomeViewState extends State<HomeView> {
         return "";
         break;
       case 'Mesibo_onMessage':
+        int count = await _mesibo.mesiboUnreadMsgCount(remoteUser);
+        print("*******Unread msg count after msg recieved: ");
+        print(count);
         // showNotificaion();
         break;
       default:
@@ -499,8 +501,6 @@ class _HomeViewState extends State<HomeView> {
 
   bool isLoading1 = false;
 
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(builder: (context, provider, _) {
@@ -529,7 +529,6 @@ class _HomeViewState extends State<HomeView> {
                         width: Get.width,
                         margin: EdgeInsets.only(
                           top: Get.height * .045,
-
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -560,14 +559,17 @@ class _HomeViewState extends State<HomeView> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
-                                          image: (loginData?.loginUser?.profilePic ==
-                                              '' ||
-                                              loginData?.loginUser?.profilePic ==
-                                                  null)
+                                          image: (loginData?.loginUser
+                                                          ?.profilePic ==
+                                                      '' ||
+                                                  loginData?.loginUser
+                                                          ?.profilePic ==
+                                                      null)
                                               ? AssetImage(dp)
                                               : NetworkImage(
-                                            loginData.loginUser.profilePic,
-                                          ),
+                                                  loginData
+                                                      .loginUser.profilePic,
+                                                ),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -583,8 +585,7 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                   ],
-                                )
-                            ),
+                                )),
                           ],
                         ),
                       ),
@@ -604,50 +605,76 @@ class _HomeViewState extends State<HomeView> {
                                     width: 40,
                                     height: 40,
                                     decoration: BoxDecoration(
-
                                       shape: BoxShape.rectangle,
                                       image: DecorationImage(
-                                        image: (loginData?.loginSchool?.schoolLogo ==
-                                            '' ||
-                                            loginData?.loginSchool?.schoolLogo ==
-                                                null)
+                                        image: (loginData?.loginSchool
+                                                        ?.schoolLogo ==
+                                                    '' ||
+                                                loginData?.loginSchool
+                                                        ?.schoolLogo ==
+                                                    null)
                                             ? AssetImage(schoolLogo)
                                             : NetworkImage(
-                                          loginData.loginSchool.schoolLogo,
-                                        ),
+                                                loginData
+                                                    .loginSchool.schoolLogo,
+                                              ),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(loginData?.loginSchool?.schoolName == "" || loginData?.loginSchool?.schoolName == null ? "BKMH" : loginData.loginSchool.schoolName.length > 20 ? '${loginData.loginSchool.schoolName.substring(0, 20)}...' : loginData.loginSchool.schoolName, style: MyTextStyle.mulishBlack().copyWith(
+                                      Text(
+                                        loginData?.loginSchool?.schoolName ==
+                                                    "" ||
+                                                loginData?.loginSchool
+                                                        ?.schoolName ==
+                                                    null
+                                            ? "BKMH"
+                                            : loginData.loginSchool.schoolName
+                                                        .length >
+                                                    20
+                                                ? '${loginData.loginSchool.schoolName.substring(0, 20)}...'
+                                                : loginData
+                                                    .loginSchool.schoolName,
+                                        style:
+                                            MyTextStyle.mulishBlack().copyWith(
+                                          fontSize: Get.width * .040,
 
-                                        fontSize: Get.width * .040,
+                                          color: themeColor,
 
-                                        color: themeColor,
+                                          //decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                      Text(
+                                        loginData?.loginSchool?.city == "" ||
+                                                loginData?.loginSchool?.city ==
+                                                    null
+                                            ? "BKMH"
+                                            : '${loginData.loginSchool.city} - ${loginData.loginSchool.pincode}',
+                                        style:
+                                            MyTextStyle.mulishBlack().copyWith(
+                                          fontFamily: "SFPro",
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: Get.width * .030,
+                                          color: themeColor,
 
-                                        //decoration: TextDecoration.underline,
-                                      ),),
-                                      Text(loginData?.loginSchool?.city == "" || loginData?.loginSchool?.city == null ? "BKMH" : '${loginData.loginSchool.city} - ${loginData.loginSchool.pincode}' , style: MyTextStyle.mulishBlack().copyWith(
-                                        fontFamily: "SFPro",
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: Get.width * .030,
-                                        color: themeColor,
-
-                                        //decoration: TextDecoration.underline,
-                                      ),)
+                                          //decoration: TextDecoration.underline,
+                                        ),
+                                      )
                                     ],
                                   )
                                 ],
                               ),
-
-                              Image.asset(banner, width: Get.width * 0.4,)
+                              Image.asset(
+                                banner,
+                                width: Get.width * 0.4,
+                              )
                             ],
-                          )
-                      ),
+                          )),
                       SizedBox(height: Get.height * .04),
                       GestureDetector(
                         onTap: () {
@@ -720,19 +747,20 @@ class _HomeViewState extends State<HomeView> {
                                 children: <Widget>[
                                   noticeCount != null && noticeCount > 0
                                       ? Badge(
-                                    badgeContent: Text(
-                                      noticeCount.toString(),
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    badgeColor:
-                                    Color.fromRGBO(190, 2, 2, 1),
-                                    child: Image.asset(
-                                      noticeBoardIcon,
-                                    ),
-                                  )
+                                          badgeContent: Text(
+                                            noticeCount.toString(),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          badgeColor:
+                                              Color.fromRGBO(190, 2, 2, 1),
+                                          child: Image.asset(
+                                            noticeBoardIcon,
+                                          ),
+                                        )
                                       : Image.asset(
-                                    noticeBoardIcon,
-                                  ),
+                                          noticeBoardIcon,
+                                        ),
                                   SizedBox(width: 5),
                                   Column(children: [
                                     Text(
@@ -806,7 +834,8 @@ class _HomeViewState extends State<HomeView> {
                             children: [
                               // subjectContainer(0, homeImage1),
                               // SizedBox(height: 10),
-                              subjectContainer(1, 'assets/images/Montessori.png'),
+                              subjectContainer(
+                                  1, 'assets/images/Montessori.png'),
                               SizedBox(height: 10),
                               subjectContainerNurseryCraftActivities(
                                   1, 'assets/images/ArtnCarfts.png'),
@@ -1609,7 +1638,7 @@ class _HomeViewState extends State<HomeView> {
     return false;
   }
 
-  void _loginUser1(user, email) {
+  void _loginUser1(user, email) async {
     if (mLoginDone) {
       // showAlert("Failed",
       //     "You have already initiated login. If the connection status is not 1, check the token and the package name/bundle ID");
@@ -1632,6 +1661,10 @@ class _HomeViewState extends State<HomeView> {
     print(
         "==========================================================================================");
     remoteUser = email;
+
+    int counntt = await _mesibo.mesiboUnreadMsgCount(remoteUser);
+    print("******Unread Count inside home.dart is: ");
+    print(counntt);
 
     //school admin email
   }
