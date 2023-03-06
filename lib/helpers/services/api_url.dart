@@ -23,4 +23,5 @@ class Apis {
   static String weeklyTracking = loginApiUrl + 'progress/aggregate';
   static String weeklyTracking2 = loginApiUrl + 'progress/list';
   static String profilePicUpload = loginApiUrl + 'users/profile_pic/upload';
-}
+  static String sendFcmToken = loginApiUrl + 'users/add/fcm_token/';
+ }
