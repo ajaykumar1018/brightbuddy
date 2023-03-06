@@ -60,6 +60,15 @@ public class MainActivity extends FlutterActivity implements FlutterPlugin, Mesi
         MesiboPlugin.MesiboPluginApi.setup(flutterPluginBinding.getBinaryMessenger(), null);
     }
 
+    public Long mesiboUnreadMsgCount(String peer) {
+        int unreadMessageCount = Mesibo.getProfile(peer).getUnreadMessageCount();
+        String unreadCount = String.valueOf(unreadMessageCount);
+        Log.d("***Unread message count: ", unreadCount);
+        System.out.println("***Unread message count in Java:");
+        System.out.println(unreadCount);
+        return Long.valueOf(unreadMessageCount);
+    }
+
 
     public void setup(String token) {
         Log.d("setup", token);
