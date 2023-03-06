@@ -617,8 +617,8 @@ class _HomeViewState extends State<HomeView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width: 60,
-                                    height: 30,
+                                    width: 80,
+                                    height: 35,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       image: DecorationImage(
@@ -651,8 +651,8 @@ class _HomeViewState extends State<HomeView> {
                                             ? "BKMH"
                                             : loginData.loginSchool.schoolName
                                                         .length >
-                                                    20
-                                                ? '${loginData.loginSchool.schoolName.substring(0, 20)}...'
+                                                    18
+                                                ? '${loginData.loginSchool.schoolName.substring(0, 18)}...'
                                                 : loginData
                                                     .loginSchool.schoolName,
                                         style:
