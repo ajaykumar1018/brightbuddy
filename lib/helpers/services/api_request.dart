@@ -67,6 +67,29 @@ class ApiRequest {
     }
   }
 
+  Future sendUserFcmToken(String email, String token) async {
+    try {
+      bool isConnected = await checkInternet();
+      if( !isConnected) {
+        ShowMessageForApi.inDialog("No internet Connection", true);
+        return false;
+      }
+      var client = http.Client();
+      String uri = Apis.sendFcmToken;
+      var url = Uri.parse(uri + '$email' + '/$token');
+      var response = await client.put(url);
+
+      if(response.statusCode == 200){
+        var json =response.body;
+        return "FCM token Sent Successfully";
+      }else{
+        print(response.reasonPhrase);
+      }
+  }catch (err){
+      print(err);
+    }
+  }
+
   Future getAdminDetail(String schoolCode) async {
     try {
       bool isConnected = await checkInternet();
@@ -154,6 +177,8 @@ class ApiRequest {
     }
     return false;
   }
+
+
 
   Future loginApi(String email, String password) async {
     try {

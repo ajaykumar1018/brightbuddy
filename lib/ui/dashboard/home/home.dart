@@ -75,6 +75,7 @@ class _HomeViewState extends State<HomeView> {
   UserToken tokenDetails;
   List<AdminDetail> adminDetails;
   int secondContainerTotalPercentageActivities;
+
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
@@ -129,6 +130,23 @@ class _HomeViewState extends State<HomeView> {
     print('======================FCM Token===================: $token');
     setState(() {
       _token = token;
+    });
+    sendFcmToken(token);
+
+  }
+
+  Future sendFcmToken(String token) async{
+    isLoading = true;
+    var userEmail = loginData?.loginUser?.email;
+    apiRequest.sendUserFcmToken(userEmail, token).then((response) async {
+      isLoading = false;
+      if (response != false) {
+        if (response['code'] == 200) {
+          print("Fcm token sent successfully");
+        }else{
+          print("error sending userfcm token");
+        }
+      }
     });
   }
 
@@ -210,15 +228,6 @@ class _HomeViewState extends State<HomeView> {
     _refreshController.refreshCompleted();
   }
 
-
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    calculateTotalAverage();
-    getEnrollmentFunc4();
-    getEnrollmentFunc5();
-    getNotices();
-    getMesiboDetails();
-  }
-
   void Mesibo_onConnectionStatus(int status) {
     print('Mesibo_onConnectionStatus: ' + status.toString());
     mesiboStatus = 'Mesibo status: ' + status.toString();
@@ -240,6 +249,8 @@ class _HomeViewState extends State<HomeView> {
         break;
       case 'Mesibo_onMessage':
         // showNotificaion();
+      print("new message received");
+
         break;
       default:
         return "";
@@ -601,8 +612,8 @@ class _HomeViewState extends State<HomeView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width: 40,
-                                    height: 40,
+                                    width: 60,
+                                    height: 30,
                                     decoration: BoxDecoration(
 
                                       shape: BoxShape.rectangle,
@@ -644,7 +655,7 @@ class _HomeViewState extends State<HomeView> {
                                 ],
                               ),
 
-                              Image.asset(banner, width: Get.width * 0.4,)
+                              Image.asset(banner, width: Get.width * 0.3,)
                             ],
                           )
                       ),
@@ -1621,23 +1632,15 @@ class _HomeViewState extends State<HomeView> {
     mLoginDone = true;
     print("\n Inside Login User1 \n");
     print(user.token);
-    print(
-        "==========================================================================================");
     _mesibo.setup(user.token);
-    print(
-        '=========================Token=================== line 1642 $_token');
+    print('fcm token for mesibo $_token');
     _mesibo.setPushToken(_token, false);
-
-    print("\n Below Setup");
-    print(
-        "==========================================================================================");
     remoteUser = email;
 
     //school admin email
   }
 
   void _showMessages() {
-    print("remoteUser============" + remoteUser);
     if (!isOnline()) {
       getMesiboDetails();
     } else {
