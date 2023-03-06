@@ -71,6 +71,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   TextEditingController searchController = TextEditingController();
   int noticeCount;
+  int unreadMessageCount;
   List<Notice> notices;
   UserToken tokenDetails;
   List<AdminDetail> adminDetails;
@@ -132,10 +133,9 @@ class _HomeViewState extends State<HomeView> {
       _token = token;
     });
     sendFcmToken(token);
-
   }
 
-  Future sendFcmToken(String token) async{
+  Future sendFcmToken(String token) async {
     isLoading = true;
     var userEmail = loginData?.loginUser?.email;
     apiRequest.sendUserFcmToken(userEmail, token).then((response) async {
@@ -143,7 +143,7 @@ class _HomeViewState extends State<HomeView> {
       if (response != false) {
         if (response['code'] == 200) {
           print("Fcm token sent successfully");
-        }else{
+        } else {
           print("error sending userfcm token");
         }
       }
@@ -251,8 +251,11 @@ class _HomeViewState extends State<HomeView> {
         int count = await _mesibo.mesiboUnreadMsgCount(remoteUser);
         print("*******Unread msg count after msg recieved: ");
         print(count);
+        setState(() {
+          unreadMessageCount = count;
+        });
         // showNotificaion();
-      print("new message received");
+        print("new message received");
 
         break;
       default:
@@ -681,8 +684,10 @@ class _HomeViewState extends State<HomeView> {
                                   )
                                 ],
                               ),
-
-                              Image.asset(banner, width: Get.width * 0.3,)
+                              Image.asset(
+                                banner,
+                                width: Get.width * 0.3,
+                              )
                             ],
                           )),
                       SizedBox(height: Get.height * .04),
@@ -727,12 +732,29 @@ class _HomeViewState extends State<HomeView> {
                             GestureDetector(
                               onTap: () {
                                 _showMessages();
+                                setState(() {
+                                  unreadMessageCount = 0;
+                                });
                               },
                               child: Column(
                                 children: <Widget>[
-                                  Image.asset(
-                                    messageIcon,
-                                  ),
+                                  unreadMessageCount != null &&
+                                          unreadMessageCount > 0
+                                      ? Badge(
+                                          badgeContent: Text(
+                                            unreadMessageCount.toString(),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          badgeColor:
+                                              Color.fromRGBO(190, 2, 2, 1),
+                                          child: Image.asset(
+                                            messageIcon,
+                                          ),
+                                        )
+                                      : Image.asset(
+                                          messageIcon,
+                                        ),
                                   SizedBox(width: 5),
                                   Column(children: [
                                     Text(
@@ -1665,9 +1687,10 @@ class _HomeViewState extends State<HomeView> {
     _mesibo.setPushToken(_token, false);
     remoteUser = email;
 
-    int counntt = await _mesibo.mesiboUnreadMsgCount(remoteUser);
-    print("******Unread Count inside home.dart is: ");
-    print(counntt);
+    int unreadMessage = await _mesibo.mesiboUnreadMsgCount(remoteUser);
+    setState(() {
+      unreadMessageCount = unreadMessage;
+    });
 
     //school admin email
   }
