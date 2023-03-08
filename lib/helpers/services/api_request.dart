@@ -70,7 +70,7 @@ class ApiRequest {
   Future sendUserFcmToken(String email, String token) async {
     try {
       bool isConnected = await checkInternet();
-      if( !isConnected) {
+      if (!isConnected) {
         ShowMessageForApi.inDialog("No internet Connection", true);
         return false;
       }
@@ -79,13 +79,16 @@ class ApiRequest {
       var url = Uri.parse(uri + '$email' + '/$token');
       var response = await client.put(url);
 
-      if(response.statusCode == 200){
-        var json =response.body;
-        return "FCM token Sent Successfully";
-      }else{
+      if (response.statusCode == 200) {
+        var json = response.body;
+        print("FCM token Sent Successfully to DB");
+        return "FCM token Sent Successfully to DB";
+      } else {
+        print("error sending userfcm token: " + response.statusCode.toString());
+        print(response.body);
         print(response.reasonPhrase);
       }
-  }catch (err){
+    } catch (err) {
       print(err);
     }
   }
@@ -177,8 +180,6 @@ class ApiRequest {
     }
     return false;
   }
-
-
 
   Future loginApi(String email, String password) async {
     try {

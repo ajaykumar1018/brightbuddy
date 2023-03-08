@@ -94,7 +94,7 @@ class MontLibraryDetails extends StatelessWidget {
               : Container(
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text('Due for Return : ' +
+                    child: Text('Returned On : ' +
                         DateFormat('dd/MM/yy').format(returnDate)),
                   ),
                 ),

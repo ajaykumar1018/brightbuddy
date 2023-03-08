@@ -141,11 +141,7 @@ class _HomeViewState extends State<HomeView> {
     apiRequest.sendUserFcmToken(userEmail, token).then((response) async {
       isLoading = false;
       if (response != false) {
-        if (response['code'] == 200) {
-          print("Fcm token sent successfully");
-        } else {
-          print("error sending userfcm token");
-        }
+        print(response);
       }
     });
   }
@@ -268,8 +264,8 @@ class _HomeViewState extends State<HomeView> {
   Future getMesiboDetails() async {
     isLoading2 = true;
     Future.wait([
-      getUserToken(),
       getAdminDetail(),
+      getUserToken(),
     ]).then((value) {
       isLoading2 = false;
       print('value all: $value');
@@ -548,18 +544,23 @@ class _HomeViewState extends State<HomeView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 0),
-                                  child: strokedText(
-                                      color: themeColor,
-                                      fontSize: Get.width * .055,
-                                      text: '${greeting()}!',
-                                      isProgressIndicator: false),
+                            Container(
+                              width: 100,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: DecorationImage(
+                                  image: (loginData?.loginSchool?.schoolLogo ==
+                                              '' ||
+                                          loginData?.loginSchool?.schoolLogo ==
+                                              null)
+                                      ? AssetImage(schoolLogo)
+                                      : NetworkImage(
+                                          loginData.loginSchool.schoolLogo,
+                                        ),
+                                  fit: BoxFit.cover,
                                 ),
-                              ],
+                              ),
                             ),
                             GestureDetector(
                                 onTap: () {
@@ -616,27 +617,6 @@ class _HomeViewState extends State<HomeView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 80,
-                                    height: 35,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      image: DecorationImage(
-                                        image: (loginData?.loginSchool
-                                                        ?.schoolLogo ==
-                                                    '' ||
-                                                loginData?.loginSchool
-                                                        ?.schoolLogo ==
-                                                    null)
-                                            ? AssetImage(schoolLogo)
-                                            : NetworkImage(
-                                                loginData
-                                                    .loginSchool.schoolLogo,
-                                              ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -651,8 +631,8 @@ class _HomeViewState extends State<HomeView> {
                                             ? "BKMH"
                                             : loginData.loginSchool.schoolName
                                                         .length >
-                                                    18
-                                                ? '${loginData.loginSchool.schoolName.substring(0, 18)}...'
+                                                    40
+                                                ? '${loginData.loginSchool.schoolName.substring(0, 40)}...'
                                                 : loginData
                                                     .loginSchool.schoolName,
                                         style:
@@ -684,10 +664,10 @@ class _HomeViewState extends State<HomeView> {
                                   )
                                 ],
                               ),
-                              Image.asset(
-                                banner,
-                                width: Get.width * 0.3,
-                              )
+                              // Image.asset(
+                              //   banner,
+                              //   width: Get.width * 0.3,
+                              // )
                             ],
                           )),
                       SizedBox(height: Get.height * .04),
@@ -699,36 +679,6 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             // Spacer(),
-                            Column(
-                              children: <Widget>[
-                                Image.asset(
-                                  bookCheckIcon,
-                                ),
-                                SizedBox(width: 5),
-                                Column(children: [
-                                  Text(
-                                    'Mont.',
-                                    style: MyTextStyle.mulishBlack().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Get.width * .045,
-                                      color: themeColor,
-
-                                      //decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Library',
-                                    style: MyTextStyle.mulishBlack().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Get.width * .045,
-                                      color: themeColor,
-
-                                      //decoration: TextDecoration.underline,
-                                    ),
-                                  )
-                                ]),
-                              ],
-                            ),
                             GestureDetector(
                               onTap: () {
                                 _showMessages();
@@ -818,6 +768,36 @@ class _HomeViewState extends State<HomeView> {
                                   ]),
                                 ],
                               ),
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Image.asset(
+                                  bookCheckIcon,
+                                ),
+                                SizedBox(width: 5),
+                                Column(children: [
+                                  Text(
+                                    'Mont.',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
+
+                                      //decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Library',
+                                    style: MyTextStyle.mulishBlack().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Get.width * .045,
+                                      color: themeColor,
+
+                                      //decoration: TextDecoration.underline,
+                                    ),
+                                  )
+                                ]),
+                              ],
                             ),
                             // GestureDetector(
                             //   onTap: () {

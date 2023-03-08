@@ -45,9 +45,10 @@ class _StartActivityScreenState extends State<StartActivityScreen> {
 
   @override
   void initState() {
-   init();
+    init();
     super.initState();
   }
+
   init() async {
     dataMap = <String, double>{
       "Cognitive Skill": cw,
@@ -57,16 +58,14 @@ class _StartActivityScreenState extends State<StartActivityScreen> {
       "Language Skills": lw,
     };
 
-   await Provider.of<DashboardProvider>(context, listen: false)
+    await Provider.of<DashboardProvider>(context, listen: false)
         .getActivitiesOverView(
       '${getEnrollmentModel?.getEnrollmenItems?.first?.userEmail ?? ''}',
       getEnrollmentModel?.getEnrollmenItems?.first?.courseId ?? 0,
     );
 
     activityCategoryList.clear();
-    setState(() {
-
-    });
+    setState(() {});
     print('before my list length ssx ${activityCategoryList.length}');
     print('before api list length ${getActivitiesOverviewList.length}');
     getActivitiesOverviewList.forEach((element) {
@@ -82,8 +81,8 @@ class _StartActivityScreenState extends State<StartActivityScreen> {
     print(subActivities.length);
     print('after my list length ${activityCategoryList.length}');
     print('after api list length ${getActivitiesOverviewList.length}');
-
   }
+
   DateTime _dateTime = DateTime.now();
 
   //Time cha kahitari
@@ -408,7 +407,7 @@ class _StartActivityScreenState extends State<StartActivityScreen> {
                     // activitySubActivityList.clear();
                     activitySubCategorySelected = null;
                     activityCategorySelected = newValue;
-                    print("Yash - Activity");
+
                     if (activityCategorySelected.activities.isNotEmpty) {
                       activitySubActivityList =
                           activityCategorySelected.activities;
@@ -483,8 +482,6 @@ class _StartActivityScreenState extends State<StartActivityScreen> {
                 isDense: true,
                 onChanged: (GetActivitiesOverviewActivities newValue) {
                   setState(() {
-                    print("Yash - SubActivity");
-
                     activitySubCategorySelected = newValue;
 
                     cw = newValue.cw.toDouble();
