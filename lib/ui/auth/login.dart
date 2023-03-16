@@ -87,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
                                 ),
                                 strokedText(
                                     text:
-                                        'Welcome to Bright Beep - Stay connected with the school.',
+                                        'Welcome to Bright Beep\nStay connected with the school.',
                                     fontSize: Get.width * .05,
                                     color: themeColor,
                                     isProgressIndicator: false),
@@ -95,7 +95,7 @@ class _LoginViewState extends State<LoginView> {
                                   height: Get.width * .05,
                                 ),
                                 Text(
-                                  "*Note* : For the first time use the login email and password provided by the school, you would need to set your own password later.\nNext send a test message 'hi' by clicking the Message button ( like WhatsApp) so that you are added in the list of communication box of the school. ",
+                                  "1. Use the login ID and Password (Provided During Registration).\n2. Please change password after login.\n3. Child display picture can be updated.\n4. Please send a 'Hi' in message section to enroll for school communication.",
                                   style: MyTextStyle.mulish().copyWith(
                                       fontSize: Get.width * .04,
                                       color: lightBlack),

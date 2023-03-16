@@ -570,8 +570,8 @@ class _HomeViewState extends State<HomeView> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Container(
-                                      width: 33,
-                                      height: 33,
+                                      width: 40,
+                                      height: 40,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
@@ -595,7 +595,7 @@ class _HomeViewState extends State<HomeView> {
                                       child: Text(
                                         loginData?.loginUser?.name ?? '',
                                         style: MyTextStyle.mulish().copyWith(
-                                            fontSize: Get.width * .035,
+                                            fontSize: Get.width * .038,
                                             color: lightBlack,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -632,7 +632,9 @@ class _HomeViewState extends State<HomeView> {
                                             : loginData.loginSchool.schoolName
                                                         .length >
                                                     40
-                                                ? '${loginData.loginSchool.schoolName.substring(0, 40)}...'
+                                                ? '${loginData.loginSchool.schoolName.substring(0, 40)}\n${loginData.loginSchool.schoolName.substring(
+                                                    41,
+                                                  )}'
                                                 : loginData
                                                     .loginSchool.schoolName,
                                         style:
@@ -930,7 +932,7 @@ class _HomeViewState extends State<HomeView> {
                   Text(
                     index == 0
                         ? '$enrolled_course_name :  Concepts\nRevision & Practice Tracker'
-                        : "Montessori Activities\nRevision & Practice Tracker",
+                        : "Montessori Activities\nDIY Tracker",
                     // ? getEnrollmentModel
                     //         ?.getEnrollmenItems?.first?.courseName ??
                     //     ''
@@ -1081,7 +1083,7 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Craft Activities\nPractice Tracking",
+                    "Craft Activities\nDIY Tracker",
                     textAlign: TextAlign.center,
                     style: MyTextStyle.mulishBlack().copyWith(
                         fontWeight: FontWeight.bold,
