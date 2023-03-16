@@ -269,8 +269,8 @@ class _HomeViewState extends State<HomeView> {
     ]).then((value) {
       isLoading2 = false;
       print('value all: $value');
-      DemoUser user = DemoUser(value[0], loginData?.loginUser?.email);
-      _loginUser1(user, value[1]);
+      DemoUser user = DemoUser(value[1], loginData?.loginUser?.email);
+      _loginUser1(user, value[0]);
     }).catchError((err) {
       print(err);
       isLoading2 = false;
@@ -1652,22 +1652,23 @@ class _HomeViewState extends State<HomeView> {
     return false;
   }
 
-  void _loginUser1(user, email) async {
+  void _loginUser1(user, remoteUserEmail) async {
     if (mLoginDone) {
       // showAlert("Failed",
       //     "You have already initiated login. If the connection status is not 1, check the token and the package name/bundle ID");
       _mesibo.showMessages(remoteUser);
       return;
     }
-    print("userDetails: ${user.token}");
-    print('email_id: $email');
+    print("userDetails user.token: ${user.token}");
+    print("userDetails user.email: ${user.address}");
+    print('remote user email_id: $remoteUserEmail');
     mLoginDone = true;
     print("\n Inside Login User1 \n");
     print(user.token);
     _mesibo.setup(user.token);
     print('fcm token for mesibo $_token');
-    _mesibo.setPushToken(_token, false);
-    remoteUser = email;
+    _mesibo.setPushToken(_token, true);
+    remoteUser = remoteUserEmail;
 
     int unreadMessage = await _mesibo.mesiboUnreadMsgCount(remoteUser);
     setState(() {

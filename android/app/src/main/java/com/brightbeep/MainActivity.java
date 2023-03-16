@@ -36,6 +36,7 @@ import java.util.HashMap;
 public class MainActivity extends FlutterActivity implements FlutterPlugin, MesiboPlugin.MesiboPluginApi, Mesibo.ConnectionListener, Mesibo.MessageListener{
 
     MethodChannel channel;
+    //public Boolean result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,9 @@ public class MainActivity extends FlutterActivity implements FlutterPlugin, Mesi
     }
 
     public void setPushToken(String token, Boolean voip) {
-        Mesibo.setPushToken(token);
+        Boolean result = Mesibo.setPushToken(token);
+        System.out.println("*** setPushToken result:");
+        System.out.println(result);
     }
 
     public void sendMessage(@NonNull String peer, @NonNull String message) {
