@@ -15,13 +15,13 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer';
+import 'package:custom_full_image_screen/custom_full_image_screen.dart';
 
 class NoticeBoardDetails extends StatelessWidget {
   NoticeBoardDetails({
     Key key,
   }) : super(key: key);
   final details = Get.arguments;
-
 
   void handleAcknowledgment() async {
     var data = loginData?.loginUser;
@@ -32,8 +32,6 @@ class NoticeBoardDetails extends StatelessWidget {
       Get.off(() => NoticeBoardView());
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -118,53 +116,80 @@ class NoticeBoardDetails extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('notice'),
+                              Text('Notice'),
                               Text(DateFormat('dd/MM/yy hh:mm a')
                                   .format(details['dateTime']))
                             ],
                           ),
                         ),
                         Container(
-                          child: Column(
-                            children: [
-                              Text(
-                                details['title'],
-                                style: MyTextStyle.mulishBlack().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Get.width * .04,
-                                  color: themeColor,
+                            child: Column(
+                          children: [
+                            Text(
+                              details['title'],
+                              style: MyTextStyle.mulishBlack().copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: Get.width * .04,
+                                color: themeColor,
 
-                                  //decoration: TextDecoration.underline,
+                                //decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                                // child: Image.network(
+                                //   details['imageUrl'],
+                                //   height: 200,
+                                //   width: 200,
+                                //   fit: BoxFit.cover,
+                                // ),
+
+                                child: ImageCachedFullscreen(
+                              imageUrl: details['imageUrl'],
+                              imageWidth: 200,
+                              imageHeight: 200,
+                              placeholder: Container(
+                                child: Icon(Icons.check),
+                              ),
+                              errorWidget: Container(
+                                child: Icon(
+                                  Icons.error,
+                                  size: 68,
+                                  color: Colors.red,
                                 ),
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                child: Image.network(
-                                  details['imageUrl'],
-                                  height: 200,
-                                  width: 200,
-                                  fit: BoxFit.cover,
+                              iconBackButtonColor: Colors.red,
+                              imageDetailsHeight: 800,
+                              imageDetailsWidth:
+                                  MediaQuery.of(context).size.width,
+                              hideBackButtonDetails: false,
+                              appBarBackgroundColorDetails: Colors.red,
+                              backgroundColorDetails: Colors.transparent,
+                              imageDetailsFit: BoxFit.fitWidth,
+                              hideAppBarDetails: true,
+                              imageFit: BoxFit.cover,
+                              withHeroAnimation: true,
+                              placeholderDetails:
+                                  Center(child: CircularProgressIndicator()),
+                            )),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Container(
+                              width: 300,
+                              child: Text(
+                                details['body'],
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  overflow: TextOverflow.fade,
                                 ),
                               ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Container(
-                                width: 300,
-                                child: Text(
-                                  details['body'],
-                                  softWrap: true,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    overflow: TextOverflow.fade,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          ],
+                        )),
                         !details['acknowledgment']
                             ? Container(
                                 margin: EdgeInsets.all(20),
@@ -185,6 +210,5 @@ class NoticeBoardDetails extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

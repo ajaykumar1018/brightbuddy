@@ -64,7 +64,7 @@ class _MontLibraryScreenState extends State<MontLibraryScreen> {
         progressIndicator: MyLoader(),
         child: Scaffold(
           backgroundColor: scaffold,
-          appBar: globalAppBar('Notice Board'),
+          appBar: globalAppBar('Mont. Library'),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -120,30 +120,35 @@ class _MontLibraryScreenState extends State<MontLibraryScreen> {
               ),
               SizedBox(height: 20),
               Expanded(
-                  child: montLib?.length > 0 ? Visibility(
-                visible: isLoaded,
-                child: ListView.builder(
-                  itemCount: montLib?.length,
-                  itemBuilder: (context, index) {
-                      return MontLibraryItem(
-                        title: montLib[index].kitName,
-                        issueDate: montLib[index].issueDate,
-                        dueDate: montLib[index].dueDate,
-                        returnDate: montLib[index].returnDate,
-                      );
-
-                  },
-                ),
-                replacement: Center(child: CircularProgressIndicator()),
-              ) : Visibility(
-                    visible: isLoaded,
-                      replacement: Center(child: CircularProgressIndicator()),
-                      child: Center(child: Text("No Kits Issued", textAlign: TextAlign.center, style: TextStyle(
-                          fontWeight: FontWeight.bold,
-
-                          color: themeColor,
-                          fontSize: Get.width * .035), ))),
-                  ),
+                child: montLib?.length > 0
+                    ? Visibility(
+                        visible: isLoaded,
+                        child: ListView.builder(
+                          itemCount: montLib?.length,
+                          itemBuilder: (context, index) {
+                            return MontLibraryItem(
+                              title: montLib[index].kitName,
+                              issueDate: montLib[index].issueDate,
+                              dueDate: montLib[index].dueDate,
+                              returnDate: montLib[index].returnDate,
+                            );
+                          },
+                        ),
+                        replacement: Center(child: CircularProgressIndicator()),
+                      )
+                    : Visibility(
+                        visible: isLoaded,
+                        replacement: Center(child: CircularProgressIndicator()),
+                        child: Center(
+                            child: Text(
+                          "No Kits Issued",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: themeColor,
+                              fontSize: Get.width * .035),
+                        ))),
+              ),
             ],
           ),
         ),

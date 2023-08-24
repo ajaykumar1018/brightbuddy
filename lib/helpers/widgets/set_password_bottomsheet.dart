@@ -77,7 +77,7 @@ class _SetPasswordBottomSheetState extends State<SetPasswordBottomSheet> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Hello User, This is your first login on-to\n BK@Home app, please set\n your password.',
+                      'Hello User, This is your first login on-to\n Bright Beep app, please set\n your password.',
                       textAlign: TextAlign.center,
                       style: MyTextStyle.mulishBlack().copyWith(
                         color: Color(0xff748A9D),

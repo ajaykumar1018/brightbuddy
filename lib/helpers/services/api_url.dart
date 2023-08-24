@@ -1,7 +1,7 @@
 class Apis {
   static String baseUrl = 'https://api.thinkific.com/api/public/v1/';
   static String loginApiUrl = 'https://api-brightbeep.brightedumont.com/';
-  //static String loginApiUrl = 'http://192.168.1.24:8000/';
+  // static String loginApiUrl = 'http://192.168.1.4:8000';
   static String login = loginApiUrl + 'auth/login';
   static String notices = loginApiUrl + 'notices/all';
   static String noticeAck = loginApiUrl + 'notices/ack';

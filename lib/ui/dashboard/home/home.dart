@@ -42,6 +42,8 @@ import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:badges/badges.dart';
 
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 // import 'package:device_apps/device_apps.dart';
 // import 'package:appcheck/appcheck.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
@@ -52,6 +54,7 @@ import 'package:bright_kid/token_monitor.dart';
 import 'package:flutter/services.dart';
 
 import 'package:bright_kid/services/local_notification.dart';
+import 'package:bright_kid/utils/web_view.dart';
 
 class DemoUser {
   String token;
@@ -1475,7 +1478,7 @@ class _HomeViewState extends State<HomeView> {
                   SizedBox(height: Get.height * .04),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [openApp("Scan Now", camScanIcon)],
+                    children: [openApp("Scan QR", camScanIcon)],
                   ),
                 ],
               ),
@@ -1577,11 +1580,35 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  Future<void> scanQRcode() async {
+    String qrScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+
+    qrScanRes = await FlutterBarcodeScanner.scanBarcode(
+        "#64C0FA", "Cancel", true, ScanMode.QR);
+    print("Scanned Barcode is: $qrScanRes");
+
+    if (qrScanRes != "-1" && Uri.parse(qrScanRes).isAbsolute) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WebViewPage(url: qrScanRes),
+        ),
+      );
+    } else {
+      print("Could not launch $qrScanRes");
+      showAlert(
+        "Scan Unsucessful",
+        "Could not launch the QR code scanned URL.",
+      );
+    }
+  }
+
   Widget openApp(String text, image) {
     return GestureDetector(
       onTap: () {
         // Get.to(() => screen);
-        appChecker();
+        scanQRcode();
       },
       child: Container(
         color: Colors.transparent,
